@@ -1,0 +1,7 @@
+# Override that turns CORS on for the directory page (Module 2).
+#   docker compose -f docker-compose.yml -f docker-compose.cors.yml up -d      CORS on
+#   docker compose up -d                                                       CORS off again
+services:
+  api:
+    environment:
+      CORS_ORIGINS: http://localhost:3000

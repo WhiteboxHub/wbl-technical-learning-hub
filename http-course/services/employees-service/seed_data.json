@@ -1,0 +1,226 @@
+{
+ "departments": [
+  {
+   "id": 1,
+   "name": "Human Resources",
+   "location": "Pleasanton"
+  },
+  {
+   "id": 2,
+   "name": "Engineering",
+   "location": "San Jose"
+  },
+  {
+   "id": 3,
+   "name": "Finance",
+   "location": "Pleasanton"
+  },
+  {
+   "id": 4,
+   "name": "Sales",
+   "location": "Austin"
+  }
+ ],
+ "employees": [
+  {
+   "id": 1,
+   "name": "Priya Raman",
+   "email": "priya.raman@example.com",
+   "title": "Head of HR",
+   "department_id": 1,
+   "manager_id": null,
+   "hire_date": "2015-03-02",
+   "salary": 185000.0
+  },
+  {
+   "id": 2,
+   "name": "Marcus Lee",
+   "email": "marcus.lee@example.com",
+   "title": "Engineering Director",
+   "department_id": 2,
+   "manager_id": 1,
+   "hire_date": "2016-06-13",
+   "salary": 210000.0
+  },
+  {
+   "id": 3,
+   "name": "Elena Garcia",
+   "email": "elena.garcia@example.com",
+   "title": "Finance Director",
+   "department_id": 3,
+   "manager_id": 1,
+   "hire_date": "2017-01-09",
+   "salary": 195000.0
+  },
+  {
+   "id": 4,
+   "name": "Tom Becker",
+   "email": "tom.becker@example.com",
+   "title": "Sales Director",
+   "department_id": 4,
+   "manager_id": 1,
+   "hire_date": "2017-09-18",
+   "salary": 190000.0
+  },
+  {
+   "id": 5,
+   "name": "Aisha Khan",
+   "email": "aisha.khan@example.com",
+   "title": "HR Generalist",
+   "department_id": 1,
+   "manager_id": 1,
+   "hire_date": "2019-04-22",
+   "salary": 82000.0
+  },
+  {
+   "id": 6,
+   "name": "Daniel Wu",
+   "email": "daniel.wu@example.com",
+   "title": "Recruiter",
+   "department_id": 1,
+   "manager_id": 1,
+   "hire_date": "2021-02-01",
+   "salary": 76000.0
+  },
+  {
+   "id": 7,
+   "name": "Sofia Rossi",
+   "email": "sofia.rossi@example.com",
+   "title": "Senior Engineer",
+   "department_id": 2,
+   "manager_id": 2,
+   "hire_date": "2018-05-07",
+   "salary": 165000.0
+  },
+  {
+   "id": 8,
+   "name": "Ravi Patel",
+   "email": "ravi.patel@example.com",
+   "title": "Engineer",
+   "department_id": 2,
+   "manager_id": 2,
+   "hire_date": "2020-08-24",
+   "salary": 135000.0
+  },
+  {
+   "id": 9,
+   "name": "Hannah Cole",
+   "email": "hannah.cole@example.com",
+   "title": "Engineer",
+   "department_id": 2,
+   "manager_id": 2,
+   "hire_date": "2021-10-04",
+   "salary": 128000.0
+  },
+  {
+   "id": 10,
+   "name": "Omar Hassan",
+   "email": "omar.hassan@example.com",
+   "title": "QA Engineer",
+   "department_id": 2,
+   "manager_id": 2,
+   "hire_date": "2022-01-17",
+   "salary": 112000.0
+  },
+  {
+   "id": 11,
+   "name": "Grace Kim",
+   "email": "grace.kim@example.com",
+   "title": "DevOps Engineer",
+   "department_id": 2,
+   "manager_id": 2,
+   "hire_date": "2022-07-11",
+   "salary": 140000.0
+  },
+  {
+   "id": 12,
+   "name": "Lucas Meyer",
+   "email": "lucas.meyer@example.com",
+   "title": "Accountant",
+   "department_id": 3,
+   "manager_id": 3,
+   "hire_date": "2019-11-04",
+   "salary": 88000.0
+  },
+  {
+   "id": 13,
+   "name": "Nina Petrova",
+   "email": "nina.petrova@example.com",
+   "title": "Financial Analyst",
+   "department_id": 3,
+   "manager_id": 3,
+   "hire_date": "2020-03-16",
+   "salary": 97000.0
+  },
+  {
+   "id": 14,
+   "name": "James O'Neil",
+   "email": "james.oneil@example.com",
+   "title": "Payroll Specialist",
+   "department_id": 3,
+   "manager_id": 3,
+   "hire_date": "2021-06-28",
+   "salary": 79000.0
+  },
+  {
+   "id": 15,
+   "name": "Mei Chen",
+   "email": "mei.chen@example.com",
+   "title": "Account Executive",
+   "department_id": 4,
+   "manager_id": 4,
+   "hire_date": "2019-02-11",
+   "salary": 92000.0
+  },
+  {
+   "id": 16,
+   "name": "Carlos Mendes",
+   "email": "carlos.mendes@example.com",
+   "title": "Account Executive",
+   "department_id": 4,
+   "manager_id": 4,
+   "hire_date": "2020-09-07",
+   "salary": 90000.0
+  },
+  {
+   "id": 17,
+   "name": "Zara Ahmed",
+   "email": "zara.ahmed@example.com",
+   "title": "Sales Development Rep",
+   "department_id": 4,
+   "manager_id": 4,
+   "hire_date": "2022-04-04",
+   "salary": 64000.0
+  },
+  {
+   "id": 18,
+   "name": "Ben Foster",
+   "email": "ben.foster@example.com",
+   "title": "Sales Development Rep",
+   "department_id": 4,
+   "manager_id": 4,
+   "hire_date": "2023-01-23",
+   "salary": 62000.0
+  },
+  {
+   "id": 19,
+   "name": "Leah Brooks",
+   "email": "leah.brooks@example.com",
+   "title": "Customer Success Manager",
+   "department_id": 4,
+   "manager_id": 4,
+   "hire_date": "2021-12-06",
+   "salary": 85000.0
+  },
+  {
+   "id": 20,
+   "name": "Arjun Nair",
+   "email": "arjun.nair@example.com",
+   "title": "Junior Engineer",
+   "department_id": 2,
+   "manager_id": 7,
+   "hire_date": "2023-06-12",
+   "salary": 105000.0
+  }
+ ]
+}

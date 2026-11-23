@@ -1,0 +1,120 @@
+{
+  "realm": "hr",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "roles": {
+    "realm": [
+      {
+        "name": "hr_admin"
+      },
+      {
+        "name": "manager"
+      },
+      {
+        "name": "employee"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "hr_admin",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "hr_admin@example.com",
+      "firstName": "Priya",
+      "lastName": "Raman",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "hrdemo-local-only",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "hr_admin"
+      ]
+    },
+    {
+      "username": "manager",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "manager@example.com",
+      "firstName": "Marcus",
+      "lastName": "Lee",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "hrdemo-local-only",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "manager"
+      ]
+    },
+    {
+      "username": "employee",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "employee@example.com",
+      "firstName": "Sofia",
+      "lastName": "Rossi",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "hrdemo-local-only",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "employee"
+      ]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "portal",
+      "name": "portal",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "http://localhost:3001/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3001"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3001/*"
+      }
+    },
+    {
+      "clientId": "payroll",
+      "name": "payroll",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "http://localhost:3002/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3002"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3002/*"
+      }
+    },
+    {
+      "clientId": "hr-api-cli",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true
+    }
+  ]
+}

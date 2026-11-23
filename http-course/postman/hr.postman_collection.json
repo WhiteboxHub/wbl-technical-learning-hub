@@ -1,0 +1,1447 @@
+{
+  "info": {
+    "name": "HR API (course)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Collection for the HTTP/APIs course. Start the stack with scripts/setup.sh first. Run folder 1 in order."
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "emp_id",
+      "value": ""
+    },
+    {
+      "key": "dept_id",
+      "value": ""
+    },
+    {
+      "key": "etag",
+      "value": ""
+    },
+    {
+      "key": "demo_password",
+      "value": ""
+    },
+    {
+      "key": "hr_token",
+      "value": ""
+    },
+    {
+      "key": "mgr_token",
+      "value": ""
+    },
+    {
+      "key": "emp_token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "0 Health",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "1 Employees CRUD (run in order)",
+      "item": [
+        {
+          "name": "List employees",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create employee (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Demo\",\n  \"email\": \"postman.demo@example.com\",\n  \"title\": \"Analyst\",\n  \"department_id\": 3,\n  \"manager_id\": 3,\n  \"hire_date\": \"2024-05-01\",\n  \"salary\": 80000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Run once. If you run it twice you get 409 because email is unique."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 201', () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json(); pm.collectionVariables.set('emp_id', j.id);",
+                  "pm.test('Location header points at the new resource', () => pm.expect(pm.response.headers.get('Location')).to.eql('/v2/employees/' + j.id));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Read employee (GET) + save ETag",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/{{emp_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "{{emp_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "pm.collectionVariables.set('etag', pm.response.headers.get('ETag'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Replace employee (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/{{emp_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "{{emp_id}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Demo\",\n  \"email\": \"postman.demo@example.com\",\n  \"title\": \"Senior Analyst\",\n  \"department_id\": 3,\n  \"manager_id\": 3,\n  \"hire_date\": \"2024-05-01\",\n  \"salary\": 90000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update some fields (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/{{emp_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "{{emp_id}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"salary\": 95000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete employee (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/{{emp_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "{{emp_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Read deleted employee -> 404",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/{{emp_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "{{emp_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2 Departments",
+      "item": [
+        {
+          "name": "List departments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/departments",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "departments"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create department",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/departments",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "departments"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Dept\",\n  \"location\": \"Austin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 201', () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set('dept_id', pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Read department",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/departments/{{dept_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "departments",
+                "{{dept_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Replace department",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/departments/{{dept_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "departments",
+                "{{dept_id}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Dept 2\",\n  \"location\": \"Austin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Employees of a department (nested)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/departments/2/employees",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "departments",
+                "2",
+                "employees"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete department",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/departments/{{dept_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "departments",
+                "{{dept_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete department with employees -> 409",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/departments/2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "departments",
+                "2"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3 Lists: pagination, filter, sort, search",
+      "item": [
+        {
+          "name": "Page 1 (limit 5)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees?limit=5&offset=0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('X-Total-Count is 20', () => pm.expect(pm.response.headers.get('X-Total-Count')).to.eql('20'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Page 2 (offset 5)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees?limit=5&offset=5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                },
+                {
+                  "key": "offset",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Filter by department",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees?department_id=2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees"
+              ],
+              "query": [
+                {
+                  "key": "department_id",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sort by salary desc",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees?sort=-salary&limit=3",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "-salary"
+                },
+                {
+                  "key": "limit",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search q=garcia",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees?q=garcia",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "garcia"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Bad sort field -> 422",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees?sort=password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "password"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 422', () => pm.response.to.have.status(422));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4 Errors you should recognise",
+      "item": [
+        {
+          "name": "404 not found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/99999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "99999"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "405 method not allowed",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 405', () => pm.response.to.have.status(405));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "422 invalid body",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 422', () => pm.response.to.have.status(422));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "409 duplicate email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Demo\",\n  \"email\": \"priya.raman@example.com\",\n  \"title\": \"Analyst\",\n  \"department_id\": 3,\n  \"manager_id\": 3,\n  \"hire_date\": \"2024-05-01\",\n  \"salary\": 80000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5 Advanced: ETag, If-Match, Idempotency-Key",
+      "item": [
+        {
+          "name": "GET employee 3 (note the ETag)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/3",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "3"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "pm.collectionVariables.set('etag', pm.response.headers.get('ETag'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Conditional GET -> 304",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "If-None-Match",
+                "value": "{{etag}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/3",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "3"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 304', () => pm.response.to.have.status(304));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH with stale If-Match -> 412",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "If-Match",
+                "value": "\"stale\""
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/3",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "3"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Finance Director\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 412', () => pm.response.to.have.status(412));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH with current If-Match -> 200",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "If-Match",
+                "value": "{{etag}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/3",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "3"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Finance Director\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST with Idempotency-Key (send twice)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Idempotency-Key",
+                "value": "postman-demo-key-1"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Demo\",\n  \"email\": \"idem.demo@example.com\",\n  \"title\": \"Analyst\",\n  \"department_id\": 3,\n  \"manager_id\": 3,\n  \"hire_date\": \"2024-05-01\",\n  \"salary\": 80000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Send this twice: the second response has Idempotent-Replayed: true and the same id. Delete the employee afterwards."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 both times', () => pm.response.to.have.status(201));",
+                  "console.log('Idempotent-Replayed:', pm.response.headers.get('Idempotent-Replayed'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6 Auth (Module 4) - needs auth on and demo_password set",
+      "description": "Start the API with docker-compose.auth.yml, then set the collection variable demo_password (read it privately with: docker compose exec -T api printenv DEMO_PASSWORD).",
+      "item": [
+        {
+          "name": "Login as hr_admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "pm.collectionVariables.set('hr_token', pm.response.json().access_token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/auth/token",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "auth",
+                "token"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "hr_admin"
+                },
+                {
+                  "key": "password",
+                  "value": "{{demo_password}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login as manager",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "pm.collectionVariables.set('mgr_token', pm.response.json().access_token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/auth/token",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "auth",
+                "token"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "manager"
+                },
+                {
+                  "key": "password",
+                  "value": "{{demo_password}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login as employee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "pm.collectionVariables.set('emp_token', pm.response.json().access_token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v2/auth/token",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "auth",
+                "token"
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "employee"
+                },
+                {
+                  "key": "password",
+                  "value": "{{demo_password}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "HR reads employee 7 -> 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{hr_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/7",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "7"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Manager (Engineering) reads employee 7 -> 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mgr_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/7",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "7"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Employee reads own record -> 200",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{emp_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/7",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "7"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Employee reads employee 1 -> 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{emp_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Manager reads employee 1 (other dept) -> 403",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mgr_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v2/employees/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "v2",
+                "employees",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+# Override: the API trusts tokens issued by Keycloak (Module 5, beat 5.6).
+#   docker compose --profile sso -f docker-compose.yml -f docker-compose.oidc.yml up -d
+services:
+  api:
+    environment:
+      AUTH: oidc

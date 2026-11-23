@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HR Directory</title>
+  <style>
+    :root { --bg:#fff; --fg:#1b1f24; --muted:#5b6670; --line:#d8dee4; --accent:#2457d6; --err:#b42318; }
+    [data-theme="dark"] { --bg:#14181d; --fg:#e8ecf0; --muted:#9aa5b1; --line:#2c343d; --accent:#7aa2ff; --err:#ff8a80; }
+    * { box-sizing: border-box; }
+    body { margin:0; font:16px/1.5 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+    main { max-width:960px; margin:0 auto; padding:16px; }
+    header { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+    h1 { font-size:1.4rem; margin:8px 0; }
+    h2 { font-size:1.05rem; margin:24px 0 8px; }
+    button, a.btn { font:inherit; padding:6px 12px; border:1px solid var(--line); background:transparent; color:var(--fg); border-radius:6px; cursor:pointer; text-decoration:none; }
+    button:hover, a.btn:hover { border-color:var(--accent); }
+    table { width:100%; border-collapse:collapse; }
+    th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
+    th { color:var(--muted); font-weight:600; }
+    .scroll { overflow-x:auto; }
+    #status { color:var(--muted); margin:8px 0; }
+    #status.error { color:var(--err); }
+    textarea { width:100%; min-height:70px; font:inherit; background:transparent; color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:8px; }
+    pre { background:transparent; border:1px solid var(--line); border-radius:6px; padding:10px; overflow-x:auto; margin:0; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    small { color:var(--muted); }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>HR Directory</h1>
+    <div class="row">
+      <small>API: <code id="apiLabel"></code></small>
+      <button id="themeBtn" type="button">Toggle theme</button>
+    </div>
+  </header>
+
+  <h2>Employees</h2>
+  <div class="row"><button id="reloadBtn" type="button">Reload</button></div>
+  <p id="status" role="status">Loading…</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Title</th><th>Dept</th><th>Manager</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <h2>Draft note <small>(kept in sessionStorage)</small></h2>
+  <textarea id="note" placeholder="Type something, reload the page, then open this page in a new tab."></textarea>
+
+  <h2>What the browser is holding</h2>
+  <div class="row">
+    <button id="refreshStore" type="button">Refresh view</button>
+    <a class="btn" id="cookieLink" target="_blank" rel="noopener">Set demo cookies (opens API)</a>
+  </div>
+  <pre id="store"></pre>
+</main>
+
+<script>
+  const API = "http://localhost:8000";
+  document.getElementById("apiLabel").textContent = API;
+  document.getElementById("cookieLink").href = API + "/demo/cookie";
+
+  const $ = (id) => document.getElementById(id);
+  const safe = (fn, fallback = null) => { try { return fn(); } catch { return fallback; } };
+
+  // ---- theme: localStorage (persists across tabs and reloads) ----
+  function applyTheme() {
+    document.documentElement.dataset.theme = safe(() => localStorage.getItem("theme"), "light") || "light";
+  }
+  $("themeBtn").addEventListener("click", () => {
+    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    safe(() => localStorage.setItem("theme", next));
+    applyTheme(); renderStore();
+  });
+
+  // ---- draft note: sessionStorage (per tab) ----
+  $("note").value = safe(() => sessionStorage.getItem("draft"), "") || "";
+  $("note").addEventListener("input", (e) => { safe(() => sessionStorage.setItem("draft", e.target.value)); renderStore(); });
+
+  // ---- what the browser holds ----
+  function dump(storage) {
+    const out = {};
+    for (let i = 0; i < storage.length; i++) { const k = storage.key(i); out[k] = storage.getItem(k); }
+    return out;
+  }
+  function renderStore() {
+    $("store").textContent = JSON.stringify({
+      localStorage: safe(() => dump(localStorage), {}),
+      sessionStorage: safe(() => dump(sessionStorage), {}),
+      "document.cookie": document.cookie || "(empty: HttpOnly cookies are not visible here)"
+    }, null, 2);
+  }
+  $("refreshStore").addEventListener("click", renderStore);
+
+  // ---- employees: the page calls the API with fetch ----
+  async function loadEmployees() {
+    const status = $("status"), rows = $("rows");
+    status.className = ""; status.textContent = "Loading…"; rows.replaceChildren();
+    try {
+      const res = await fetch(API + "/v2/employees?limit=100");
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const list = await res.json();
+      const byId = Object.fromEntries(list.map((e) => [e.id, e.name]));
+      for (const e of list) {
+        const tr = document.createElement("tr");
+        for (const v of [e.id, e.name, e.title, e.department_id, e.manager_id ? byId[e.manager_id] ?? e.manager_id : "—"]) {
+          const td = document.createElement("td"); td.textContent = v; tr.appendChild(td);
+        }
+        rows.appendChild(tr);
+      }
+      status.textContent = list.length + " employees loaded from " + API + "/v2/employees";
+    } catch (err) {
+      status.className = "error";
+      status.textContent = "Could not load employees (" + err.message + "). Open the DevTools Console and Network tabs.";
+    }
+  }
+  $("reloadBtn").addEventListener("click", loadEmployees);
+
+  applyTheme(); renderStore(); loadEmployees();
+</script>
+</body>
+</html>

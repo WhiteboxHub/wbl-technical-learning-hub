@@ -1,0 +1,22 @@
+# Override: split the HR monolith into two services behind the gateway (Module 7).
+#   docker compose -f docker-compose.yml -f docker-compose.split.yml up -d --build
+#   (go back) docker compose up -d --force-recreate gateway ; docker compose stop employees-service departments-service
+# Talk to it through the gateway: http://localhost:8080/v2/employees/7?expand=department
+services:
+  employees-service:
+    build: ./services/employees-service
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      DEPARTMENTS_URL: http://departments-service:8000
+    depends_on:
+      - redis
+      - departments-service
+  departments-service:
+    build: ./services/departments-service
+  gateway:
+    volumes:
+      - ./gateway/nginx.split.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+      - employees-service
+      - departments-service

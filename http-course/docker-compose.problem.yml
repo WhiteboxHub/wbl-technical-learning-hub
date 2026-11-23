@@ -1,0 +1,7 @@
+# Override: RFC 7807 problem+json errors (Module 3, beat 3.6).
+#   docker compose -f docker-compose.yml -f docker-compose.problem.yml up -d   problem+json on
+#   docker compose up -d                                                       back to default errors
+services:
+  api:
+    environment:
+      PROBLEM_JSON: "1"

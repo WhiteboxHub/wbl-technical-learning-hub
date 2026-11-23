@@ -1,0 +1,12 @@
+# Override: turn authentication on (Module 4).
+#   docker compose -f docker-compose.yml -f docker-compose.auth.yml up -d               auth on, 15-minute tokens
+#   TOKEN_TTL=5 docker compose -f docker-compose.yml -f docker-compose.auth.yml up -d   5-second tokens (expiry demo)
+#   docker compose up -d                                                                auth off again
+services:
+  api:
+    environment:
+      AUTH: "1"
+      TOKEN_TTL: ${TOKEN_TTL:-900}
+
+# Module 5, beat 5.6: validate tokens issued by Keycloak instead of our own login.
+#   docker compose --profile sso -f docker-compose.yml -f docker-compose.oidc.yml up -d
