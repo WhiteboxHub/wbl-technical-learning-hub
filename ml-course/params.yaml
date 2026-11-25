@@ -7,7 +7,7 @@ data:
 model:
   C: 1.0
   max_iter: 500
-  class_weight: null
+  class_weight: balanced
   threshold: 0.35
 
 mlflow:

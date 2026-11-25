@@ -4,14 +4,19 @@ Demonstrates how `dvc repro` skips unchanged upstream stages and only reruns
 downstream stages when a parameter changes.
 """
 import argparse
+import importlib.util
+import os
 from pathlib import Path
-import shutil
 import subprocess
+import sys
 import tempfile
 
 
 def _run(cmd: list[str], cwd: Path) -> str:
-    res = subprocess.run(cmd, cwd=cwd, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    env = os.environ.copy()
+    env["PATH"] = str(Path(sys.executable).parent) + os.pathsep + env.get("PATH", "")
+    resolved = [sys.executable, "-m", "dvc", *cmd[1:]] if cmd[0] == "dvc" else cmd
+    res = subprocess.run(resolved, cwd=cwd, env=env, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     return res.stdout
 
 
@@ -22,8 +27,8 @@ def main() -> None:
     args = parser.parse_args()
 
     print("\n=== TUESDAY DEMO 2: DVC PIPELINE INCREMENTAL REPRO ===")
-    if shutil.which("dvc") is None:
-        print("DVC CLI not installed in this Python env. Run inside Docker or install `dvc` via requirements.txt.")
+    if importlib.util.find_spec("dvc") is None:
+        print("DVC is not installed in this Python env. Run inside Docker or install `dvc` via requirements.txt.")
         return
 
     with tempfile.TemporaryDirectory(prefix="dvc_demo2_") as tmp:

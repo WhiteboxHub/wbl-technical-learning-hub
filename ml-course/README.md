@@ -3,6 +3,7 @@
 Running example: **Fraud Detection System** — built step by step from an untracked experiment (Monday) to a DVC-versioned, MLflow-tracked, Dockerized FastAPI service with live PSI/KS drift detection (Friday template build).
 
 ## Guides & Curriculum
+- [Instructor Steps](instructor-steps.md) — Before/during/after class runbook & co-pilot controls
 - [Course Table of Contents](docs/course-toc.md) — Week 2 PM syllabus & slide mapping to the 222-page `MLops` deck
 - [Class-Day Quick Start](docs/class-day-quickstart.md) — 5-minute instructor checklist
 - [Instructor Guide](docs/instructor-guide.md) — Mon–Fri cadence, story anchors, `5A–5D` prompts, troubleshooting
@@ -66,8 +67,8 @@ ml-course/
 ├── scripts/             # Cross-platform setup, smoke, break, fix (.sh + .ps1)
 ├── web/                 # Fraud Detection & Live Drift browser console
 ├── monitoring/          # Prometheus scrape config
-├── .github/workflows/   # GitHub Actions CI workflow (test + Docker build)
 ├── .claude/skills/      # setup-ml-class, teach-ml-class, setup-candidate, practice-ml
+├── ../.github/workflows/# GitHub Actions CI workflow (ml-course-ci.yml)
 ├── dvc.yaml / params.yaml
 ├── Dockerfile / docker-compose.yml / docker-compose.monitoring.yml
 └── requirements.txt / pyproject.toml

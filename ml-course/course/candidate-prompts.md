@@ -56,6 +56,15 @@ Every evening after class (~2 hours):
 
 ---
 
+## Friday — Worked Template Build: MLOps Fraud Detection System
+- **Deeper understanding:** *Tracking, data versioning, serving, and monitoring only become engineering when one real system wires them end to end.*
+- **Tutor Prompt:** `Tutor Agent: This week was Worked Template Build - MLOps Fraud Detection System. Retell the week's story with me, day by day, one question at a time. Where my retelling breaks, reteach that piece only. End with the three things I must practise before next week.`
+- **Practice Prompt:** `Practice Agent: Walk me through verifying all 4 Exit Gate outcomes on my local Fraud Detection build (MLflow run + registered model, DVC pipeline `dvc repro`, FastAPI Docker container `/health` + `/v1/predict` `200`/`422`, and live drift detection alert + reset). Check my terminal evidence at each stage before moving on.`
+- **Coding Prompt:** `Coding Agent: Review my Fraud Detection template changes (features.py, train.py, evaluate.py, serve.py, monitor.py) in order: does it run, is it correct, is it readable, is it production-shaped? Use your hint ladder - question, hint, outline, then code.`
+- **Quiz / Rollup Prompt:** `Quiz Agent: Run a closed-book self-test across Monday through Friday (reproducibility, DVC vs MLflow, FastAPI validation, data vs concept drift, alerting, ML lifecycle), one question at a time, no answers until the end. Then update my Candidate State and write my Weekly Rollup for the instructor.`
+
+---
+
 ## Daily Report Template
 ```markdown
 ## Week 2 PM Daily Report — <Day>

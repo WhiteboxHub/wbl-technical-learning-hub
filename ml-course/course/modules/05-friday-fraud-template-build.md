@@ -16,7 +16,7 @@ Build and verify the **Fraud Detection** template (`ml-course/`) end to end in c
 3. **Stage 3 — MLflow Tracking & Registry (`fraud_system/train.py`, `fraud_system/evaluate.py`)**
    - Log params, Precision/Recall/F1/ROC-AUC/PR-AUC, artifacts, Git/data lineage tags; register `fraud-detector` and promote through Staging -> Production.
    - *Checkpoint:* Two runs comparable in MLflow UI (`:5000`); model registered.
-4. **Stage 4 — FastAPI + Docker + CI/CD (`fraud_system/serve.py`, `Dockerfile`, `.github/workflows/ci.yml`)**
+4. **Stage 4 — FastAPI + Docker + CI/CD (`fraud_system/serve.py`, `Dockerfile`, `../.github/workflows/ml-course-ci.yml`)**
    - Serve `/health`, `/v1/predict`, `/v1/model-info`, `/v1/rollback`, `/metrics`; verify `422` on invalid transactions; run `pytest tests/ -v`; build Docker image.
    - *Checkpoint:* Container answers `scripts/smoke.sh` / `scripts/smoke.ps1` with all checks green.
 5. **Stage 5 — Monitoring & Live Drift Injection (`fraud_system/monitor.py`, `web/index.html`, `scripts/break.*`)**

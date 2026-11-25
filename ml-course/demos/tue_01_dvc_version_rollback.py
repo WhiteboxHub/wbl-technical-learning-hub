@@ -5,8 +5,9 @@ commits dataset v1, updates to v2, and rolls back to v1 proving exact byte hash 
 """
 import argparse
 import hashlib
+import importlib.util
+import os
 from pathlib import Path
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -17,7 +18,10 @@ from fraud_system.data_gen import generate_transactions
 
 
 def _run(cmd: list[str], cwd: Path) -> None:
-    subprocess.run(cmd, cwd=cwd, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    env = os.environ.copy()
+    env["PATH"] = str(Path(sys.executable).parent) + os.pathsep + env.get("PATH", "")
+    resolved = [sys.executable, "-m", "dvc", *cmd[1:]] if cmd[0] == "dvc" else cmd
+    subprocess.run(resolved, cwd=cwd, env=env, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 
 
 def _sha256(path: Path) -> str:
@@ -30,8 +34,8 @@ def main() -> None:
     args = parser.parse_args()
 
     print("\n=== TUESDAY DEMO 1: DVC DATA VERSIONING & ROLLBACK ===")
-    if shutil.which("dvc") is None:
-        print("DVC CLI not installed in this Python env. Run inside Docker or install `dvc` via requirements.txt.")
+    if importlib.util.find_spec("dvc") is None:
+        print("DVC is not installed in this Python env. Run inside Docker or install `dvc` via requirements.txt.")
         return
 
     with tempfile.TemporaryDirectory(prefix="dvc_demo1_") as tmp:

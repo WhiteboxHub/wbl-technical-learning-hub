@@ -15,16 +15,18 @@ from fraud_system.serve import app
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data-drift", action="store_true", default=True)
-    parser.add_argument("--concept-drift", action="store_true", default=False)
+    parser.add_argument("--data-drift", action="store_true", default=None, help="Inject covariate/input drift")
+    parser.add_argument("--concept-drift", action="store_true", default=False, help="Inject concept drift (calm inputs, shifted fraud rules)")
     args = parser.parse_args()
+
+    use_data_drift = (not args.concept_drift) if args.data_drift is None else args.data_drift
 
     print("\n=== THURSDAY DEMO 2: MONITORING READOUT ===")
     with TestClient(app) as client:
         client.post("/v1/monitor/reset")
         report = client.post(
             "/v1/monitor/simulate",
-            json={"n": 150, "data_drift": args.data_drift, "concept_drift": args.concept_drift, "seed": 77},
+            json={"n": 150, "data_drift": use_data_drift, "concept_drift": args.concept_drift, "seed": 77},
         ).json()
         print(f"Overall status  : {report['overall_status']}")
         print(f"Window samples  : {report['window_samples']}")

@@ -13,6 +13,8 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score, recall_score
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
 from fraud_system.data_gen import generate_transactions
 from fraud_system.features import prepare_xy
@@ -24,7 +26,12 @@ def run_untracked(label: str, seed: int | None) -> None:
     df = generate_transactions(n_rows=1000, seed=actual_seed)
     X, y = prepare_xy(df)
     X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.25, random_state=seed)
-    clf = LogisticRegression(max_iter=1500, class_weight="balanced")
+    clf = Pipeline(
+        [
+            ("scaler", StandardScaler()),
+            ("clf", LogisticRegression(max_iter=1500, class_weight="balanced")),
+        ]
+    )
     clf.fit(X_tr, y_tr)
     probs = clf.predict_proba(X_te)[:, 1]
     preds = (probs >= 0.4).astype(int)
