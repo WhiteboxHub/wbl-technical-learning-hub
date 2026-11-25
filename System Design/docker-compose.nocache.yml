@@ -1,0 +1,8 @@
+# No-cache and DB bottleneck override
+# Demonstrates what happens when the corner shop is closed (NO_CACHE=1)
+# and database queries incur realistic disk/locking latency under heavy traffic.
+services:
+  api:
+    environment:
+      NO_CACHE: "1"
+      SIMULATE_DB_DELAY: "0.2"
