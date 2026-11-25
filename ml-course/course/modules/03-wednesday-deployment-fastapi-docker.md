@@ -58,7 +58,7 @@ Open with it, return to it at every topic change, and close with it. Time: ~3 ho
 
 ## 5D. Demo Programs (`demos/`)
 - **Demo 1 (FastAPI Service):** `python demos/wed_01_fastapi_service.py` -> Live variation: `--amount 4500 --risk 0.92`
-- **Demo 2 (Docker Container Predict):** `python demos/wed_02_docker_predict.py` -> Live variation: `--amount 25.0`
+- **Demo 2 (Docker Container Predict):** `python demos/wed_02_docker_predict.py` -> Live variation: `--low-risk`
 - **Demo 3 (Validation vs Corrupt):** `python demos/wed_03_validation_vs_corrupt.py` -> Live variation: `--amount 120`
 
 ## 6. Real Scenarios

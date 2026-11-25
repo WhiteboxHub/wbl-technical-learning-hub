@@ -22,20 +22,20 @@ def main() -> None:
     print("\n=== WEDNESDAY DEMO 1: FASTAPI MODEL SERVICE ===")
     payload = {
         "amount": args.amount,
-        "hour_of_day": 2,
+        "hour_of_day": 14,
         "merchant_risk_score": args.risk,
-        "tx_velocity_24h": 4,
-        "distance_from_home_km": 120.0,
-        "is_international": 1,
-        "card_present": 0,
-        "account_age_days": 90,
+        "tx_velocity_24h": 1,
+        "distance_from_home_km": 5.0,
+        "is_international": 0,
+        "card_present": 1,
+        "account_age_days": 800,
     }
     with TestClient(app) as client:
         h = client.get("/health")
         p = client.post("/v1/predict", json=payload)
         print(f"GET  /health     -> {h.status_code} {h.json()}")
         print(f"POST /v1/predict -> {p.status_code} {p.json()}")
-    print("LIVE VARIATION: re-run with `--amount 4500 --risk 0.92` to flip LOW -> HIGH fraud risk.")
+    print("LIVE VARIATION: re-run with `--amount 4500 --risk 0.92` to flip is_fraud False -> True.")
 
 
 if __name__ == "__main__":
