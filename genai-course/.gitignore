@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Docker volumes
+chromadata/
+
+# Environment — NEVER commit real keys
+.env
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# Class and practice notes (personal, generated during class)
+.class/
+.practice/
+
+# Fine-tuning outputs (large, generated)
+data/finetune_dataset.jsonl
+data/lora_adapter/
+data/eval_results.json
+
+# OS
+.DS_Store
+desktop.ini
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
