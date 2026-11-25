@@ -1,0 +1,358 @@
+{
+  "info": {
+    "name": "GenAI & RAG API (Course)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Complete Postman collection for Week 3 AM: Generative AI, Embeddings, ChromaDB, RAG, and Evaluation. Start stack with scripts/setup.sh first."
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Health & Status",
+      "item": [
+        {
+          "name": "Get Service Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Checks API liveness, ChromaDB heartbeat, and OpenAI API key status."
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Tokenization (BPE)",
+      "item": [
+        {
+          "name": "Tokenize Text (Standard)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Generative artificial intelligence models process text using subword tokens rather than raw characters or full words.\",\n  \"model\": \"gpt-4o-mini\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/tokenize",
+              "host": ["{{base_url}}"],
+              "path": ["tokenize"]
+            },
+            "description": "Splits text into Byte-Pair Encoded tokens and returns token IDs, pieces, and count."
+          }
+        },
+        {
+          "name": "Tokenize Code Snippet",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"def calculate_attention(Q, K, V):\\n    scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(d_k)\\n    return torch.matmul(F.softmax(scores, dim=-1), V)\",\n  \"model\": \"gpt-4o-mini\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/tokenize",
+              "host": ["{{base_url}}"],
+              "path": ["tokenize"]
+            },
+            "description": "Demonstrates whitespace and indentation preservation in code tokenization."
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Embeddings",
+      "item": [
+        {
+          "name": "Generate Vector Embeddings",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"texts\": [\n    \"Full-time employees receive 18 days of paid time off per calendar year.\",\n    \"Vacation days accrue at 1.5 days per month of service.\",\n    \"The cafeteria serves fresh sandwiches every weekday at noon.\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/embed",
+              "host": ["{{base_url}}"],
+              "path": ["embed"]
+            },
+            "description": "Generates 1536-dimensional dense vector embeddings using text-embedding-3-small."
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Document Chunking",
+      "item": [
+        {
+          "name": "Recursive Character Chunking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"# Meridian Solutions Remote Work Policy\\n\\n## Eligibility\\nEmployees who have completed 90 days of continuous employment may request a hybrid or fully remote arrangement.\\n\\n## Equipment Reimbursement\\nMeridian provides a one-time $500 home office stipend for ergonomic chairs, monitors, and peripherals.\",\n  \"strategy\": \"recursive\",\n  \"chunk_size\": 120,\n  \"chunk_overlap\": 20\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chunk",
+              "host": ["{{base_url}}"],
+              "path": ["chunk"]
+            },
+            "description": "Splits text respecting structural boundaries (paragraphs, headings, newlines)."
+          }
+        },
+        {
+          "name": "Fixed Character Chunking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Meridian Solutions provides full-time employees with healthcare coverage, vision benefits, dental insurance, and a 401(k) matching program up to 4% of base pay.\",\n  \"strategy\": \"fixed\",\n  \"chunk_size\": 50,\n  \"chunk_overlap\": 10\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chunk",
+              "host": ["{{base_url}}"],
+              "path": ["chunk"]
+            },
+            "description": "Splits text strictly every N characters without linguistic boundary checks."
+          }
+        },
+        {
+          "name": "Sentence Chunking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Annual reviews occur in November. Merit salary increases take effect on January 1st. Performance ratings determine bonus pool distribution.\",\n  \"strategy\": \"sentence\",\n  \"chunk_size\": 200,\n  \"chunk_overlap\": 0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chunk",
+              "host": ["{{base_url}}"],
+              "path": ["chunk"]
+            },
+            "description": "Groups complete sentences until the chunk size threshold is reached."
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Vector DB & Corpus",
+      "item": [
+        {
+          "name": "List Indexed Documents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documents",
+              "host": ["{{base_url}}"],
+              "path": ["documents"]
+            },
+            "description": "Lists all documents currently indexed in ChromaDB."
+          }
+        },
+        {
+          "name": "Ingest Custom Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"document_id\": \"travel-and-expense-policy.md\",\n  \"text\": \"# Travel and Expense Policy\\n\\nEmployees traveling on company business are reimbursed for economy class airfare, standard hotel accommodations up to $250/night, and a daily meal per diem of $75. Receipts are required for all individual expenses over $25.\",\n  \"metadata\": {\n    \"category\": \"finance\",\n    \"department\": \"travel\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ingest",
+              "host": ["{{base_url}}"],
+              "path": ["ingest"]
+            },
+            "description": "Chunks, embeds, and stores a new document into ChromaDB."
+          }
+        },
+        {
+          "name": "Delete Document from Vector Store",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documents/travel-and-expense-policy.md",
+              "host": ["{{base_url}}"],
+              "path": ["documents", "travel-and-expense-policy.md"]
+            },
+            "description": "Removes a document and all its embedded chunks from ChromaDB."
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Semantic Retrieval",
+      "item": [
+        {
+          "name": "Retrieve PTO Policy Chunks",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"How many paid vacation days do new hires receive annually?\",\n  \"n_results\": 3\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/retrieve",
+              "host": ["{{base_url}}"],
+              "path": ["retrieve"]
+            },
+            "description": "Embeds query and performs top-k cosine similarity nearest neighbor search."
+          }
+        },
+        {
+          "name": "Retrieve IT Security Guidance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"What are the password complexity requirements and MFA rules?\",\n  \"n_results\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/retrieve",
+              "host": ["{{base_url}}"],
+              "path": ["retrieve"]
+            },
+            "description": "Queries IT security rules and returns relevant chunk excerpts with distance scores."
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - Grounded RAG Generation",
+      "item": [
+        {
+          "name": "RAG Query (In-Domain with Citations)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"What is Meridian's 401(k) matching policy and when does vesting occur?\",\n  \"n_results\": 3,\n  \"temperature\": 0.2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/generate",
+              "host": ["{{base_url}}"],
+              "path": ["generate"]
+            },
+            "description": "Executes full RAG pipeline: retrieval, context injection, synthesis, and citation extraction."
+          }
+        },
+        {
+          "name": "RAG Query (Out-of-Domain Abstention)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"What is the proper technique for baking sourdough bread at high altitude?\",\n  \"n_results\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/generate",
+              "host": ["{{base_url}}"],
+              "path": ["generate"]
+            },
+            "description": "Tests system abstention when context lacks answers to prevent hallucination."
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 - LLM Evaluation (Judge)",
+      "item": [
+        {
+          "name": "Evaluate Faithfulness & Relevance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"What is the home internet reimbursement rate for remote employees?\",\n  \"answer\": \"Meridian Solutions provides a $75 monthly internet reimbursement for approved remote employees.\",\n  \"contexts\": [\n    \"Remote Work Policy: Section 4. Approved full-time remote employees are eligible for a monthly home internet reimbursement of $75 upon monthly expense submission.\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/evaluate",
+              "host": ["{{base_url}}"],
+              "path": ["evaluate"]
+            },
+            "description": "Runs LLM-as-a-judge to score faithfulness (groundedness) and answer relevance on a 0.0-1.0 scale."
+          }
+        }
+      ]
+    }
+  ]
+}

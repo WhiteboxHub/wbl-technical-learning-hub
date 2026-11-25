@@ -1,0 +1,22 @@
+# Fine-tuning override — NOT run during class.
+# Run at home after Module 5:
+#   docker compose -f docker-compose.yml -f docker-compose.finetune.yml run --rm finetuner
+#
+# GPU is optional (CPU works but is slow — expect several hours for phi-2 on a laptop).
+# Requires .env with OPENAI_API_KEY (used for dataset generation, not training).
+
+services:
+  finetuner:
+    build: ./api
+    command: python finetuning/train_lora.py
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+    # Uncomment for GPU support (requires nvidia-docker):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]

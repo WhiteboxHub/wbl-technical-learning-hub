@@ -1,0 +1,32 @@
+# Core API
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+pydantic==2.10.2
+python-dotenv==1.0.1
+httpx==0.28.0
+
+# OpenAI
+openai==1.57.0
+
+# Vector database
+chromadb==0.5.23
+
+# Tokenization
+tiktoken==0.8.0
+
+# Chunking
+langchain-text-splitters==0.3.2
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-anyio==0.0.0
+
+# Fine-tuning (optional, Module 5 — not installed by default in the API container)
+# Uncomment to run finetuning/train_lora.py:
+# peft==0.14.0
+# transformers==4.47.0
+# datasets==3.2.0
+# torch==2.5.1
+# accelerate==1.2.0
+# trl==0.12.2
