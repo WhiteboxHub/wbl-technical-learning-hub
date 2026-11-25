@@ -1,0 +1,8 @@
+.class/
+.practice/
+__pycache__/
+*.pyc
+.venv/
+demos/day2/data/run_log.txt
+demos/day2/data/updated_config.json
+
