@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  data-analysis:
+    image: python:3.11-slim
+    container_name: wbl-data-analysis
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: >
+      bash -c "pip install --no-cache-dir -r requirements.txt &&
+               bash scripts/smoke.sh &&
+               tail -f /dev/null"
+    restart: unless-stopped
+
