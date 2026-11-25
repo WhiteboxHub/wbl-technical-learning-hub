@@ -21,7 +21,7 @@ Guides a learner from a fresh laptop to their first successful RAG retrieval and
 |---|---|
 | 10 | "Docker is not installed. Download Docker Desktop from docker.com/products/docker-desktop/ and install it." |
 | 11 | "Docker is installed but closed. Please open Docker Desktop and wait until the green light shows, then retry." |
-| 12 | "Port 8000, 8001, or 3000 is occupied by another application. Free the port or stop that app." |
+| 12 | "Port 8000, 8001, or 8501 is occupied by another application. Free the port or stop that app." |
 | 13 / 14 | Review container logs: `docker compose logs api`. Ensure OpenAI API key has sufficient quota. |
 | 16 | "Missing OpenAI API key. Copy `.env.example` to `.env` and paste your key in `OPENAI_API_KEY=sk-...`" |
 
@@ -37,7 +37,7 @@ Guides a learner from a fresh laptop to their first successful RAG retrieval and
    - The cosine similarity score.
    - The chunk metadata.
 5. **Open Visual UI:**
-   Direct them to `http://localhost:3000` in their browser to explore the Tokenizer, Chunker, and RAG Chat interfaces visually.
+   Direct them to `http://localhost:8501` in their browser to explore the Tokenizer, Chunker, and RAG Chat interfaces visually.
 6. **Wrap Up:**
    Remind them they can reset the database at any time using `scripts/setup.sh --reset` and stop using `scripts/setup.sh --stop`.
 

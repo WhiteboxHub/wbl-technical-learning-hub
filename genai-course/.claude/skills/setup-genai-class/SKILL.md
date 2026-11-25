@@ -1,6 +1,6 @@
 ---
 name: setup-genai-class
-description: Instructor setup for the Generative AI & RAG course (Week 3 AM). Use when an instructor wants to prepare their machine for teaching, says "set up the class", "get ready to teach", or the demo stack is not running. Checks prerequisites (Docker, curl, ports 3000, 8000, 8001, OPENAI_API_KEY), starts the stack with Docker Compose, runs the smoke test, and reports readiness.
+description: Instructor setup for the Generative AI & RAG course (Week 3 AM). Use when an instructor wants to prepare their machine for teaching, says "set up the class", "get ready to teach", or the demo stack is not running. Checks prerequisites (Docker, curl, ports 8000, 8001, 8501, OPENAI_API_KEY), starts the stack with Docker Compose, runs the smoke test, and reports readiness.
 ---
 
 # Instructor Setup
@@ -21,7 +21,7 @@ Prepares the instructor's workstation for delivering Week 3 AM (GenAI & RAG). Th
 | 0 | Ready | Proceed to step 3 |
 | 10 | Docker missing | Direct instructor to install Docker Desktop: https://www.docker.com/products/docker-desktop/ |
 | 11 | Docker daemon not running | Ask instructor to start Docker Desktop and wait until the daemon is active |
-| 12 | Port conflict (3000, 8000, or 8001) | Identify which process holds the port. Do not kill processes without instructor confirmation. |
+| 12 | Port conflict (8000, 8001, or 8501) | Identify which process holds the port. Do not kill processes without instructor confirmation. |
 | 13 | API or ChromaDB unhealthy | Check container logs (`docker compose logs api vector-db`), diagnose root cause, fix, and re-run. |
 | 14 | Smoke test failed | Inspect failed assertions in `scripts/smoke.sh`, inspect API endpoints, and fix. |
 | 15 | curl missing | Advise instructor to install curl. |
@@ -31,7 +31,7 @@ Prepares the instructor's workstation for delivering Week 3 AM (GenAI & RAG). Th
    - FastAPI Health: `curl -sf http://localhost:8000/health`
    - ChromaDB Heartbeat: `curl -sf http://localhost:8001/api/v1/heartbeat`
    - HR Corpus Seed Documents: `curl -sf http://localhost:8000/documents`
-   - Streamlit Visual Explorer: `http://localhost:3000`
+   - Streamlit Visual Explorer: `http://localhost:8501` (alias: `http://localhost:3000`)
    - FastAPI Interactive Docs: `http://localhost:8000/docs`
    - Course modules: verify `course/modules/01-transformers-and-attention.md` through `05-fine-tuning-and-evaluation.md` exist.
 4. **Report readiness checklist:**

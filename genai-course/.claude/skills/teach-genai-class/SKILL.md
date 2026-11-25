@@ -12,7 +12,7 @@ Content lives in `course/modules/01-transformers-and-attention.md` through `cour
 **The GenAI demo stack** consists of:
 - **API (`localhost:8000`)**: FastAPI backend with tokenization, embedding, chunking, ChromaDB ingestion, retrieval, and RAG synthesis.
 - **ChromaDB (`localhost:8001`)**: Dedicated vector database container with cosine distance space.
-- **UI (`localhost:3000`)**: Streamlit visual explorer (Tokenizer, Embeddings, Chunker, RAG Chat).
+- **UI (`localhost:8501`, alias `localhost:3000`)**: Streamlit visual explorer (🔤 Tokenizer, ❖ Embeddings, ✂️ Chunker, 🛡️ RAG Chat, Evaluation).
 
 ## Module File Format
 Each module has **Objectives**, ordered **Beats** (`### Beat N.M — title`), an **Exercise**, a **Done-check**, and **Clean-up**. A beat has:
@@ -27,7 +27,7 @@ Each module has **Objectives**, ordered **Beats** (`### Beat N.M — title`), an
 2. Check the stack: `curl -sf http://localhost:8000/health`. If down, run the `setup-genai-class` skill first.
 3. Verify that `OPENAI_API_KEY` is configured in `.env`.
 4. Read `.class/progress.md` if present. If it shows an unfinished module, offer **resume** or **start over**.
-5. Show a 5-line overview: objectives, number of beats, estimated time, and live demo targets (Terminal / Streamlit UI :3000).
+5. Show a 5-line overview: objectives, number of beats, estimated time, and live demo targets (Terminal / Streamlit UI :8501).
 6. Ask: **"Is your screen shared with candidates?"** If yes, hold all answers until the instructor explicitly asks with `answer`.
 7. Initialize/update `.class/progress.md` with the module, start time, and beat list.
 
@@ -36,7 +36,7 @@ Each module has **Objectives**, ordered **Beats** (`### Beat N.M — title`), an
 2. **Say.** Key points formatted as 3–5 short bullets.
 3. **Demo.**
    - `run: agent` → execute the commands in order with Bash, show the output, then present the **Point out** notes.
-   - `run: instructor` → provide the exact URL (e.g. `http://localhost:3000/01_tokenizer`), curl command, or steps and pause for the instructor.
+   - `run: instructor` → provide the exact URL (e.g. `http://localhost:8501/01_tokenizer`), curl command, or steps and pause for the instructor.
    - If output differs from expectations, investigate honestly. Likely causes: `.env` key unset, ChromaDB unseeded, or container restarting.
 4. **Ask.** Present 1–3 questions for the room. Withhold answers until the instructor types `answer`.
 5. **Wait** for the instructor to say `next` / `done`. If candidates are confused, offer an alternative visual explanation or rephrase.
