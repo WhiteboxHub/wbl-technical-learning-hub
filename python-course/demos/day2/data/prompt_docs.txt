@@ -1,0 +1,4 @@
+AI systems rely on clear prompts to produce reliable output.
+Good Python data structures keep prompts and model settings organized.
+Always log model runs to disk so you can debug issues later.
+
