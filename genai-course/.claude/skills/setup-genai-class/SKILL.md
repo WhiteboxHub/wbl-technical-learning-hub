@@ -21,7 +21,7 @@ Prepares the instructor's workstation for delivering Week 3 AM (GenAI & RAG). Th
 | 0 | Ready | Proceed to step 3 |
 | 10 | Docker missing | Direct instructor to install Docker Desktop: https://www.docker.com/products/docker-desktop/ |
 | 11 | Docker daemon not running | Ask instructor to start Docker Desktop and wait until the daemon is active |
-| 12 | Port conflict (8000, 8001, or 8501) | Identify which process holds the port. Do not kill processes without instructor confirmation. |
+| 12 | Port conflict (3000, 8000, or 8001) | Identify which process holds the port. Do not kill processes without instructor confirmation. |
 | 13 | API or ChromaDB unhealthy | Check container logs (`docker compose logs api vector-db`), diagnose root cause, fix, and re-run. |
 | 14 | Smoke test failed | Inspect failed assertions in `scripts/smoke.sh`, inspect API endpoints, and fix. |
 | 15 | curl missing | Advise instructor to install curl. |

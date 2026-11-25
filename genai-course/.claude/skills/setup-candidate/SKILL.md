@@ -21,7 +21,7 @@ Guides a learner from a fresh laptop to their first successful RAG retrieval and
 |---|---|
 | 10 | "Docker is not installed. Download Docker Desktop from docker.com/products/docker-desktop/ and install it." |
 | 11 | "Docker is installed but closed. Please open Docker Desktop and wait until the green light shows, then retry." |
-| 12 | "Port 8000, 8001, or 8501 is occupied by another application. Free the port or stop that app." |
+| 12 | "Port 3000, 8000, or 8001 is occupied by another application. Free the port or stop that app." |
 | 13 / 14 | Review container logs: `docker compose logs api`. Ensure OpenAI API key has sufficient quota. |
 | 16 | "Missing OpenAI API key. Copy `.env.example` to `.env` and paste your key in `OPENAI_API_KEY=sk-...`" |
 
@@ -30,7 +30,7 @@ Guides a learner from a fresh laptop to their first successful RAG retrieval and
    ```bash
    curl -s -X POST http://localhost:8000/retrieve \
      -H "Content-Type: application/json" \
-     -d '{"query": "How many days of PTO do I get each year?", "top_k": 2}'
+     -d '{"query": "How many days of PTO do I get each year?", "n_results": 2}'
    ```
    Point out:
    - The retrieved document excerpt from `pto-and-leave-policy.md`.

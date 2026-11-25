@@ -12,7 +12,7 @@ Content lives in `course/modules/01-transformers-and-attention.md` through `cour
 **The GenAI demo stack** consists of:
 - **API (`localhost:8000`)**: FastAPI backend with tokenization, embedding, chunking, ChromaDB ingestion, retrieval, and RAG synthesis.
 - **ChromaDB (`localhost:8001`)**: Dedicated vector database container with cosine distance space.
-- **UI (`localhost:8501`, alias `localhost:3000`)**: Streamlit visual explorer (🔤 Tokenizer, ❖ Embeddings, ✂️ Chunker, 🛡️ RAG Chat, Evaluation).
+- **UI (`localhost:8501`, alias `localhost:3000`)**: Streamlit visual explorer (🔤 Tokenizer, ❖ Embeddings, ✂️ Chunker, 🛡️ RAG Chat, ⚖️ Evaluation).
 
 ## Module File Format
 Each module has **Objectives**, ordered **Beats** (`### Beat N.M — title`), an **Exercise**, a **Done-check**, and **Clean-up**. A beat has:
