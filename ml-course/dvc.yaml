@@ -1,0 +1,41 @@
+stages:
+  prepare:
+    cmd: python -m fraud_system.data_gen --version ${data.version} --n-rows ${data.n_rows} --seed ${data.random_state} --out data/transactions.csv
+    deps:
+      - fraud_system/data_gen.py
+    params:
+      - data.version
+      - data.n_rows
+      - data.random_state
+    outs:
+      - data/transactions.csv
+
+  train:
+    cmd: python -m fraud_system.train --data data/transactions.csv --params params.yaml
+    deps:
+      - data/transactions.csv
+      - fraud_system/features.py
+      - fraud_system/train.py
+    params:
+      - data.test_size
+      - data.random_state
+      - model.C
+      - model.max_iter
+      - model.class_weight
+      - model.threshold
+    outs:
+      - artifacts/model.joblib
+      - artifacts/reference_stats.json
+    metrics:
+      - artifacts/metrics.json:
+          cache: false
+
+  evaluate:
+    cmd: python -m fraud_system.evaluate --metrics artifacts/metrics.json --params params.yaml --out artifacts/eval_report.json
+    deps:
+      - artifacts/metrics.json
+      - fraud_system/evaluate.py
+    params:
+      - monitoring.min_recall_gate
+    outs:
+      - artifacts/eval_report.json

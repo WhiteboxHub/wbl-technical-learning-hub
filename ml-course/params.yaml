@@ -1,0 +1,22 @@
+data:
+  version: v1
+  n_rows: 2000
+  test_size: 0.2
+  random_state: 42
+
+model:
+  C: 1.0
+  max_iter: 500
+  class_weight: null
+  threshold: 0.35
+
+mlflow:
+  experiment_name: fraud-detection-week2
+  registered_model_name: fraud-detector
+
+monitoring:
+  psi_warn_threshold: 0.15
+  psi_alert_threshold: 0.25
+  ks_alpha: 0.01
+  max_p95_latency_ms: 200.0
+  min_recall_gate: 0.70
