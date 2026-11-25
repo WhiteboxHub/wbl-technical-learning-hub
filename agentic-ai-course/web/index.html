@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClaimFlow AI — Enterprise Claims & Prior-Auth Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+            --accent-green: #34d399;
+            --accent-amber: #fbbf24;
+            --accent-red: #f87171;
+            --border: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-primary); color: var(--text-primary); padding: 2rem; }
+        header { margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        h1 { font-size: 1.75rem; color: var(--accent); }
+        .badge { background: #0369a1; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.85rem; }
+        .grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; }
+        .card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        h2 { font-size: 1.25rem; margin-bottom: 1rem; color: #e2e8f0; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.25rem; }
+        input, select, textarea { width: 100%; padding: 0.6rem; background: #0f172a; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.9rem; }
+        button { background: var(--accent); color: #0f172a; border: none; padding: 0.75rem 1.25rem; border-radius: 4px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #7dd3fc; }
+        .btn-approve { background: var(--accent-green); color: #064e3b; margin-right: 0.5rem; }
+        .btn-deny { background: var(--accent-red); color: #7f1d1d; }
+        .trace-item { background: #0f172a; border-left: 3px solid var(--accent); padding: 0.75rem; margin-bottom: 0.5rem; border-radius: 0 4px 4px 0; font-size: 0.85rem; }
+        .tag-status { display: inline-block; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
+        .status-approved { background: rgba(52, 211, 153, 0.2); color: var(--accent-green); }
+        .status-pending { background: rgba(251, 191, 36, 0.2); color: var(--accent-amber); }
+        .status-denied { background: rgba(248, 113, 113, 0.2); color: var(--accent-red); }
+        pre { background: #0b1120; padding: 0.75rem; border-radius: 4px; overflow-x: auto; font-size: 0.8rem; margin-top: 0.5rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <h1>ClaimFlow AI</h1>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Week 3 Capstone: Multi-Agent Healthcare Prior-Authorization Platform</p>
+        </div>
+        <div class="badge">Week 3 PM Live System</div>
+    </header>
+
+    <div class="grid">
+        <!-- Left Column: Submission & Controls -->
+        <div>
+            <div class="card">
+                <h2>Submit Prior Authorization Claim</h2>
+                <div class="form-group">
+                    <label>Claim ID</label>
+                    <input type="text" id="claimId" value="CLM-2001">
+                </div>
+                <div class="form-group">
+                    <label>Patient</label>
+                    <select id="patientSelect">
+                        <option value="PAT-901">PAT-901: John Doe (Commercial - Active)</option>
+                        <option value="PAT-902">PAT-902: Jane Smith (HMO - Active)</option>
+                        <option value="PAT-903">PAT-903: Robert Miller (Coverage Inactive)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Provider</label>
+                    <select id="providerSelect">
+                        <option value="PRV-501">PRV-501: Metro Surgical (Trusted)</option>
+                        <option value="PRV-999">PRV-999: QuickCare (High Scrutiny Trigger)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>Diagnosis (ICD-10)</label>
+                        <input type="text" id="diagCode" value="M17.11">
+                    </div>
+                    <div>
+                        <label>Procedure (CPT)</label>
+                        <input type="text" id="procCode" value="27447">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Requested Dollar Amount ($)</label>
+                    <input type="number" id="reqAmount" value="12500">
+                </div>
+                <div class="form-group">
+                    <label>Clinical Notes (PII Redaction & Prompt Shield enabled)</label>
+                    <textarea id="clinicalNotes" rows="3">Patient John Doe (SSN: 000-12-3456, phone: 555-019-2834) with severe right knee osteoarthritis failing 6 months physical therapy and NSAID regimens.</textarea>
+                </div>
+                <button onclick="submitClaim()">Submit to Agent Workflow</button>
+            </div>
+
+            <!-- HITL Approval Card (conditionally displayed) -->
+            <div class="card" id="hitlCard" style="display:none; border-color: var(--accent-amber);">
+                <h2 style="color: var(--accent-amber);">⚠️ Human-in-the-Loop Review Gate</h2>
+                <p id="hitlReason" style="font-size: 0.9rem; margin-bottom: 1rem; color: #fde68a;"></p>
+                <div class="form-group">
+                    <label>Clinical Reviewer Notes</label>
+                    <input type="text" id="reviewerNotes" value="Medically necessary per orthopedic review; prior auth authorized.">
+                </div>
+                <button class="btn-approve" onclick="resolveHITL('approve')">Approve Authorization</button>
+                <button class="btn-deny" onclick="resolveHITL('deny')">Deny Claim</button>
+            </div>
+        </div>
+
+        <!-- Right Column: Results & Observability Trace -->
+        <div>
+            <div class="card">
+                <h2>Workflow Status & Execution Trail</h2>
+                <div id="statusContainer" style="margin-bottom: 1rem;">
+                    <span style="color: var(--text-secondary);">Awaiting submission...</span>
+                </div>
+                
+                <h3 style="font-size: 1rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Multi-Agent Trace Spans</h3>
+                <div id="traceContainer"></div>
+
+                <h3 style="font-size: 1rem; margin-top: 1.5rem; margin-bottom: 0.75rem;">Token Observability & Cost</h3>
+                <div id="metricsContainer" style="font-size: 0.85rem; color: var(--text-secondary);"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentClaimId = null;
+
+        async function submitClaim() {
+            const payload = {
+                claim_id: document.getElementById('claimId').value,
+                patient_id: document.getElementById('patientSelect').value,
+                patient_name: document.getElementById('patientSelect').options[document.getElementById('patientSelect').selectedIndex].text.split(':')[1].split('(')[0].trim(),
+                provider_id: document.getElementById('providerSelect').value,
+                diagnosis_code: document.getElementById('diagCode').value,
+                procedure_code: document.getElementById('procCode').value,
+                requested_amount: parseFloat(document.getElementById('reqAmount').value),
+                clinical_notes: document.getElementById('clinicalNotes').value,
+                tenant_id: "tenant-health-corp"
+            };
+
+            currentClaimId = payload.claim_id;
+            try {
+                const res = await fetch('/api/v1/claims', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                renderClaimResult(data);
+            } catch (err) {
+                alert("Error connecting to ClaimFlow AI: " + err);
+            }
+        }
+
+        async function resolveHITL(decision) {
+            const notes = document.getElementById('reviewerNotes').value;
+            const res = await fetch(`/api/v1/claims/${currentClaimId}/human-review`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ decision, human_notes: notes })
+            });
+            const data = await res.json();
+            renderClaimResult(data);
+        }
+
+        function renderClaimResult(data) {
+            let statusClass = "status-pending";
+            if (data.status === "approved") statusClass = "status-approved";
+            if (data.status === "denied") statusClass = "status-denied";
+
+            document.getElementById('statusContainer').innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div><strong>Claim:</strong> ${data.claim_id}</div>
+                    <div class="tag-status ${statusClass}">${data.status}</div>
+                </div>
+                <div style="margin-top:0.5rem; font-size:0.9rem;">
+                    ${data.denial_reason ? `<span style="color:var(--accent-red)"><strong>Reason:</strong> ${data.denial_reason}</span>` : ''}
+                    ${data.approved_amount > 0 ? `<span style="color:var(--accent-green)"><strong>Approved Amount:</strong> $${data.approved_amount.toFixed(2)}</span>` : ''}
+                </div>
+            `;
+
+            // HITL Card display
+            const hitlCard = document.getElementById('hitlCard');
+            if (data.requires_human_review && data.status === "pending_human_approval") {
+                hitlCard.style.display = 'block';
+                document.getElementById('hitlReason').innerText = "Action required: " + (data.human_notes || "High financial risk / policy criteria requires human signoff.");
+            } else {
+                hitlCard.style.display = 'none';
+            }
+
+            // Traces
+            const traceContainer = document.getElementById('traceContainer');
+            traceContainer.innerHTML = (data.trace || []).map(t => `
+                <div class="trace-item">
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong>[${t.step}] ${t.agent} &rarr; ${t.action}</strong>
+                        <span style="color:var(--text-secondary);">${t.tokens_used} tokens</span>
+                    </div>
+                    <pre>${JSON.stringify(t.details, null, 2)}</pre>
+                </div>
+            `).join('');
+
+            // Metrics
+            document.getElementById('metricsContainer').innerHTML = `
+                <div>Total Incurred Tokens: <strong>${data.total_tokens}</strong></div>
+                <div>Calculated Execution Cost: <strong>$${data.total_cost_usd} USD</strong></div>
+                <div>Grounded Policy Citations: <strong>${(data.citations || []).join(', ') || 'None'}</strong></div>
+            `;
+        }
+    </script>
+</body>
+</html>
