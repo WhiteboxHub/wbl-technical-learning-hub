@@ -6,7 +6,6 @@ Running example: **ClaimFlow AI** — a production-grade healthcare prior-author
 
 ## Guides & Documentation
 - [Instructor Steps](instructor-steps.md) — Day-of-class step-by-step cheat sheet & voice controls
-- [Implementation Summary](docs/implementation-summary.md) — Architectural overview & comprehensive summary of all implemented components
 - [Course Table of Contents](docs/course-toc.md) — Comprehensive syllabus and topic breakdown
 - [Class-day quick start](docs/class-day-quickstart.md) — 5-minute instructor checklist
 - [Instructor Guide](docs/instructor-guide.md) — Setup, running a PM class with the agent, module plans, troubleshooting
