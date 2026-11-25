@@ -6,7 +6,7 @@ Environment: Local Python 3.10+ (zero external package dependencies required).
 | Day | Module | Title | Metaphor | Beats |
 |---|---|---|---|---|
 | **Day 1** | 1 | Python I | The Labelled Pantry | 5 beats (1.1 – 1.5) |
-| **Day 2** | 2 | Python II | The Kitchen's Containers | 4 beats (2.1 – 2.4) |
+| **Day 2** | 2 | Python II | The Kitchen's Containers | 9 beats (2.1 – 2.9) |
 
 ---
 
@@ -33,14 +33,20 @@ Beats:
 Topics:
 1. Functions (`return` vs `print`)
 2. Data Structures (`list`, `tuple`, `set`, `dict`)
-3. Big-O Basics (and Comprehensions)
-4. File Handling
+3. OOP Fundamentals (Class & Object, `__init__`, `self`, Attributes & Methods, Inheritance)
+4. Big-O Basics (and Comprehensions)
+5. File Handling
 
 Beats:
 - **Beat 2.1 – Recipe Cards: Return vs Print:** Writing reusable AI helper functions, why `print()` shows text while `return` passes values back (`None` trap).
 - **Beat 2.2 – The Four Containers:** Comparing `list` (ordered responses), `tuple` (fixed model coordinates/settings), `set` (unique stop words/tags), and `dict` (API request/response payloads).
-- **Beat 2.3 – Comprehensions & Big-O:** List/dict comprehensions for transforming datasets, plus `O(1)` dict/set lookup vs `O(n)` list scan vs `O(n^2)` nested loops.
-- **Beat 2.4 – Kitchen Logbook: File I/O:** Using `with open(...)` safely to read text documents, load/save JSON model configurations (`json`), and append run logs.
+- **Beat 2.3 – Class and Object (OOP):** Defining an `AIModel` blueprint and creating independent model objects.
+- **Beat 2.4 – Constructor (`__init__`) (OOP):** Automatically initializing each `AIModel` object's `name` and `temperature` when created.
+- **Beat 2.5 – The `self` Keyword (OOP):** How `self` lets each model object access its own configuration inside methods.
+- **Beat 2.6 – Attributes and Methods (OOP):** Storing state in instance attributes (`call_count`) and performing actions in methods (`generate_response()`).
+- **Beat 2.7 – Inheritance (OOP):** Reusing parent `AIModel` attributes and methods inside a specialized `ChatModel(AIModel)` child class.
+- **Beat 2.8 – Comprehensions & Big-O:** List/dict comprehensions for transforming datasets, plus `O(1)` dict/set lookup vs `O(n)` list scan vs `O(n^2)` nested loops.
+- **Beat 2.9 – Kitchen Logbook: File I/O:** Using `with open(...)` safely to read text documents, load/save JSON model configurations (`json`), and append run logs.
 
 ---
 

@@ -18,8 +18,9 @@ Welcome to **Python I & Python II (AI Engineering Edition)**. You will learn cor
 |---|---|---|
 | 2.1 | Functions (`return` vs `print`) | Write reusable AI helper functions and avoid the `None` return trap |
 | 2.2 | The Four Containers | Choose between `list`, `tuple`, `set`, and `dict` |
-| 2.3 | Comprehensions & Big-O | Transform datasets in one line and compare `O(1)` vs `O(n)` vs `O(n^2)` |
-| 2.4 | File Handling | Read text/JSON configs and write run logs safely using `with open(...)` |
+| 2.3–2.7 | OOP Fundamentals | Create classes and objects, use `__init__` & `self`, attributes/methods, and inheritance |
+| 2.8 | Comprehensions & Big-O | Transform datasets in one line and compare `O(1)` vs `O(n)` vs `O(n^2)` |
+| 2.9 | File Handling | Read text/JSON configs and write run logs safely using `with open(...)` |
 
 ---
 
@@ -75,6 +76,19 @@ responses = ["Yes", "No", "Yes"]       # list: ordered, changeable
 model_dims = (1536, 128000)            # tuple: ordered, fixed (immutable)
 stop_words = {"the", "a", "an"}        # set: unique, unordered, fast O(1) lookup
 payload = {"model": "mini", "temp": 0} # dict: key -> value, fast O(1) lookup
+
+# OOP Fundamentals (Class, __init__, self, Attributes/Methods, Inheritance)
+class AIModel:
+    def __init__(self, name, temperature):
+        self.name = name
+        self.temperature = temperature
+
+    def generate_response(self, prompt):
+        return f"[{self.name}] {prompt}"
+
+class ChatModel(AIModel):
+    def chat(self, message):
+        return self.generate_response(f"Chat: {message}")
 
 # List & Dict Comprehensions
 lengths = [len(r) for r in responses]

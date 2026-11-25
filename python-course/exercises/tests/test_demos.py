@@ -69,6 +69,31 @@ class TestDay2Demos(unittest.TestCase):
         self.assertIn("(count = 2)", res.stdout)
         self.assertIn("'model': 'gpt-4o-mini'", res.stdout)
 
+    def test_beat_2_3_oop_class_object(self):
+        res = run_script("demos/day2/beat_2_3_oop_class_object.py")
+        self.assertIn("provider = local-demo", res.stdout)
+        self.assertIn("Same object?    : False", res.stdout)
+
+    def test_beat_2_4_oop_constructor(self):
+        res = run_script("demos/day2/beat_2_4_oop_constructor.py")
+        self.assertIn("[__init__ called] Setting up gpt-4o-mini...", res.stdout)
+        self.assertIn("Model 2: name=gemini-2.5-flash, temp=0.9", res.stdout)
+
+    def test_beat_2_5_oop_self(self):
+        res = run_script("demos/day2/beat_2_5_oop_self.py")
+        self.assertIn("model=gpt-4o-mini, temperature=0.1", res.stdout)
+        self.assertIn("model=claude-haiku, temperature=0.8", res.stdout)
+
+    def test_beat_2_6_oop_attributes_methods(self):
+        res = run_script("demos/day2/beat_2_6_oop_attributes_methods.py")
+        self.assertIn("Simulated answer to: 'Explain Python classes'", res.stdout)
+        self.assertIn("Calls made : 2", res.stdout)
+
+    def test_beat_2_7_oop_inheritance(self):
+        res = run_script("demos/day2/beat_2_7_oop_inheritance.py")
+        self.assertIn("Inherited name : gpt-4o-mini", res.stdout)
+        self.assertIn("System(Be brief and beginner-friendly) -> User(What is inheritance?)", res.stdout)
+
     def test_beat_2_3_comprehensions_bigo(self):
         res = run_script("demos/day2/beat_2_3_comprehensions_bigo.py")
         self.assertIn("['summarize ai', 'explain big-o']", res.stdout)
@@ -87,6 +112,7 @@ class TestDay2Demos(unittest.TestCase):
     def test_day2_exercise_runs(self):
         res = run_script("exercises/day2_exercise.py")
         self.assertIn("'unique_count': 2", res.stdout)
+        self.assertIn("[gpt-4o-mini | temp=0.2] Processed: summarize notes", res.stdout)
 
 
 if __name__ == "__main__":

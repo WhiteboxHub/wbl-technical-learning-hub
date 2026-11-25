@@ -3,6 +3,7 @@
 Complete the TODOs below using Day 2 concepts:
 - Functions with return
 - Containers (list, set, dict)
+- OOP Fundamentals (AIModel class, __init__, self, attributes & methods)
 - Comprehensions
 - File Handling (with open + json.load)
 """
@@ -29,6 +30,19 @@ def analyze_prompts(prompts):
     }
 
 
+class AIModel:
+    """Simple AIModel class representing a loaded model configuration."""
+
+    def __init__(self, name, temperature):
+        # TODO 4: Store name and temperature on self
+        self.name = name
+        self.temperature = temperature
+
+    def generate_response(self, prompt):
+        # TODO 5: Return a simulated response using self.name and self.temperature
+        return f"[{self.name} | temp={self.temperature}] Processed: {prompt}"
+
+
 def main():
     raw_prompts = ["  Summarize notes ", "explain big-o", "SUMMARIZE NOTES", ""]
 
@@ -36,9 +50,12 @@ def main():
         config = json.load(f)
 
     summary = analyze_prompts(raw_prompts)
+    model = AIModel(config["model"], config["temperature"])
+
     print("=== Model Config & Prompt Analyzer ===")
-    print("Model  :", config["model"])
+    print("Model  :", model.name)
     print("Summary:", summary)
+    print("Sample :", model.generate_response(summary["cleaned"][0]))
 
 
 if __name__ == "__main__":

@@ -10,13 +10,13 @@
 - **You teach; the agent co-pilots.** It keeps the plan, runs or hands over Python terminal demos, holds the answer key, and tracks progress in `.class/progress.md`. You present the slides and talk to the room.
 - **Two independent days:**
   - **Day 1 – Python I (The Labelled Pantry):** Setup, Variables, Data Types, Input & Type Casting, Loops (`for` and `while`).
-  - **Day 2 – Python II (The Kitchen's Containers):** Functions (`return` vs `print`), Data Structures, Big-O Basics & Comprehensions, File Handling.
-- **Consistent AI Engineering examples:** Prompts, model names, token counts, temperatures, batch responses, API request/response dictionaries, dataset transforms, and JSON model configs.
+  - **Day 2 – Python II (The Kitchen's Containers):** Functions (`return` vs `print`), Data Structures, OOP Fundamentals, Big-O Basics & Comprehensions, File Handling.
+- **Consistent AI Engineering examples:** Prompts, model names, token counts, temperatures, batch responses, API request/response dictionaries, `AIModel` classes, dataset transforms, and JSON model configs.
 
 | Day | Title | Teach script | Slides | Live demos | Start with |
 |---|---|---|---|---|---|
 | 1 | Python I | `course/modules/01-python-i.md` | `course/slides/day1-python-i-slides.md` | `demos/day1/` (5 scripts) | `scripts/setup.sh --day1` |
-| 2 | Python II | `course/modules/02-python-ii.md` | `course/slides/day2-python-ii-slides.md` | `demos/day2/` (4 scripts) | `scripts/setup.sh --day2` |
+| 2 | Python II | `course/modules/02-python-ii.md` | `course/slides/day2-python-ii-slides.md` | `demos/day2/` (9 scripts) | `scripts/setup.sh --day2` |
 
 ## 2. Before your first class (one time)
 1. Install **Python 3.10+** and **Claude Code** (desktop app or CLI).
@@ -59,13 +59,18 @@ The agent will:
 | 1.4 | Loops: Stirring the Pot | `demos/day1/beat_1_4_loops.py` |
 | 1.5 | Practical Demonstration & Revision | `demos/day1/beat_1_5_revision.py` |
 
-## 5. Day 2 at a glance (~90 min)
+## 5. Day 2 at a glance (~120–135 min)
 | Beat | Topic | Demo script |
 |---|---|---|
 | 2.1 | Recipe Cards: Return vs Print | `demos/day2/beat_2_1_functions.py` |
 | 2.2 | The Four Containers | `demos/day2/beat_2_2_containers.py` |
-| 2.3 | Comprehensions & Big-O | `demos/day2/beat_2_3_comprehensions_bigo.py` |
-| 2.4 | Kitchen Logbook: File I/O | `demos/day2/beat_2_4_file_io.py` |
+| 2.3 | OOP: Class and Object | `demos/day2/beat_2_3_oop_class_object.py` |
+| 2.4 | OOP: Constructor (`__init__`) | `demos/day2/beat_2_4_oop_constructor.py` |
+| 2.5 | OOP: The `self` Keyword | `demos/day2/beat_2_5_oop_self.py` |
+| 2.6 | OOP: Attributes and Methods | `demos/day2/beat_2_6_oop_attributes_methods.py` |
+| 2.7 | OOP: Inheritance | `demos/day2/beat_2_7_oop_inheritance.py` |
+| 2.8 | Comprehensions & Big-O | `demos/day2/beat_2_3_comprehensions_bigo.py` |
+| 2.9 | Kitchen Logbook: File I/O | `demos/day2/beat_2_4_file_io.py` |
 
 ## 6. Troubleshooting
 | Symptom | Fix |

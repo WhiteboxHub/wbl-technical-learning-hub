@@ -46,7 +46,7 @@ The agent works one beat at a time: it tells you which slide to show, gives the 
 | `end` | wrap up the day |
 
 - **Beat 1.3 (Input & Type Casting):** takes keyboard input interactively, or accepts piped demo values when run by the agent.
-- **Beat 2.4 (File Handling):** reads `demos/day2/data/model_config.json` and `demos/day2/data/prompt_docs.txt` and writes a log file.
+- **Beat 2.9 (File Handling):** reads `demos/day2/data/model_config.json` and `demos/day2/data/prompt_docs.txt` and writes a log file.
 
 ## At the end of each day
 

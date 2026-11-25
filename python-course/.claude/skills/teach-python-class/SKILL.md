@@ -9,16 +9,16 @@ You are the instructor's co-pilot, not the presenter. The instructor talks to th
 
 Content lives in two independent module files:
 - **Day 1 – Python I (The Labelled Pantry):** `course/modules/01-python-i.md` (Beats 1.1 – 1.5; slides: `course/slides/day1-python-i-slides.md`)
-- **Day 2 – Python II (The Kitchen's Containers):** `course/modules/02-python-ii.md` (Beats 2.1 – 2.4; slides: `course/slides/day2-python-ii-slides.md`)
+- **Day 2 – Python II (The Kitchen's Containers):** `course/modules/02-python-ii.md` (Beats 2.1 – 2.9, including OOP Fundamentals in Beats 2.3 – 2.7; slides: `course/slides/day2-python-ii-slides.md`)
 
 Never invent syllabus topics outside the approved module file.
 
 ## Module file format
 Each day has **Objectives**, **Stack requirements**, ordered **Beats** (`### Beat N.M – title`), an **Exercise**, a **Done-check**, and **Clean-up**. Every beat has:
 - **Slides:** slide numbers and file path.
-- **Learning objective** & **Simple technical definition**.
+- **Learning objective**, **Simple technical definition**, and optional **Why this concept is important**.
 - **Say:** instructor talking points.
-- **Real-world AI example** & **Python code example**.
+- **Real-world example**, **Real-world AI example** / **AI Engineering example**, and **Python code example**.
 - **Live terminal demonstration (run: agent | instructor)** + **Point out** + **Expected output**.
 - **Common mistakes**.
 - **Ask:** `Q: … — A: …` pairs.

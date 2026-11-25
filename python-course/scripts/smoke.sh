@@ -28,10 +28,15 @@ if [ "$MODE" = "all" ] || [ "$MODE" = "day1" ]; then
 fi
 
 if [ "$MODE" = "all" ] || [ "$MODE" = "day2" ]; then
-  run_check "Day 2 Beat 2.1 functions"    python3 demos/day2/beat_2_1_functions.py
-  run_check "Day 2 Beat 2.2 containers"   python3 demos/day2/beat_2_2_containers.py
-  run_check "Day 2 Beat 2.3 comp+Big-O"   python3 demos/day2/beat_2_3_comprehensions_bigo.py
-  run_check "Day 2 Beat 2.4 file I/O"     python3 demos/day2/beat_2_4_file_io.py
+  run_check "Day 2 Beat 2.1 functions"       python3 demos/day2/beat_2_1_functions.py
+  run_check "Day 2 Beat 2.2 containers"      python3 demos/day2/beat_2_2_containers.py
+  run_check "Day 2 Beat 2.3 OOP class/obj"   python3 demos/day2/beat_2_3_oop_class_object.py
+  run_check "Day 2 Beat 2.4 OOP __init__"    python3 demos/day2/beat_2_4_oop_constructor.py
+  run_check "Day 2 Beat 2.5 OOP self"        python3 demos/day2/beat_2_5_oop_self.py
+  run_check "Day 2 Beat 2.6 OOP attr/method" python3 demos/day2/beat_2_6_oop_attributes_methods.py
+  run_check "Day 2 Beat 2.7 OOP inheritance" python3 demos/day2/beat_2_7_oop_inheritance.py
+  run_check "Day 2 Beat 2.8 comp+Big-O"      python3 demos/day2/beat_2_3_comprehensions_bigo.py
+  run_check "Day 2 Beat 2.9 file I/O"        python3 demos/day2/beat_2_4_file_io.py
 fi
 
 if [ "$MODE" = "all" ]; then

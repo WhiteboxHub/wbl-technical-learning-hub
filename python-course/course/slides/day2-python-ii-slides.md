@@ -1,16 +1,17 @@
 # Day 2 Teaching Slides — Python II (The Kitchen's Containers)
 
-Use these slides alongside `course/modules/02-python-ii.md` (Beats 2.1 – 2.4).
+Use these slides alongside `course/modules/02-python-ii.md` (Beats 2.1 – 2.9).
 
 ---
 
 ## Slide 1 — Welcome to Day 2: The Kitchen's Containers
-- **Goal:** Organize AI data cleanly, write reusable logic, understand search speed, and persist data to files.
-- **Today's 4 Topics:**
+- **Goal:** Organize AI data cleanly, write reusable logic, model AI components with OOP, understand search speed, and persist data to files.
+- **Today's 5 Topics:**
   1. Functions (`return` vs `print`)
   2. Data Structures (`list`, `tuple`, `set`, `dict`)
-  3. Big-O Basics (and Comprehensions)
-  4. File Handling
+  3. **OOP Fundamentals** (Class & Object, `__init__`, `self`, Attributes & Methods, Inheritance)
+  4. Big-O Basics (and Comprehensions)
+  5. File Handling
 
 ---
 
@@ -66,7 +67,84 @@ Use these slides alongside `course/modules/02-python-ii.md` (Beats 2.1 – 2.4).
 
 ---
 
-## Slide 7 — Comprehensions: Clean Dataset Transforms (Beat 2.3)
+## Slide 7 — OOP: Class and Object (Beat 2.3)
+- A **class** is a blueprint; an **object** is a real item built from that blueprint:
+  ```python
+  class AIModel:
+      provider = "local-demo"
+
+  fast_model = AIModel()
+  smart_model = AIModel()
+  ```
+- One class (`AIModel`), many independent objects (`fast_model is smart_model` → `False`).
+
+---
+
+## Slide 8 — Why OOP in AI Engineering? (Beat 2.3)
+- Keeps related **settings** (model name, temperature) and **actions** (`generate_response()`) bundled in one place.
+- Instead of juggling loose variables and dictionaries, each model configuration becomes its own clean object.
+
+---
+
+## Slide 9 — OOP: Constructor (`__init__`) (Beat 2.4)
+- `__init__` runs **automatically** every time you create a new object:
+  ```python
+  class AIModel:
+      def __init__(self, name, temperature):
+          self.name = name
+          self.temperature = temperature
+
+  fast_model = AIModel("gpt-4o-mini", 0.2)
+  ```
+- Two underscores on each side (`__init__`); never called directly.
+
+---
+
+## Slide 10 — OOP: The `self` Keyword (Beat 2.5)
+- `self` means **"this specific object right here"**.
+- Python passes `self` automatically as the first argument when calling a method:
+  ```python
+  class AIModel:
+      def show_config(self):
+          print(self.name, self.temperature)
+
+  summary_model.show_config()  # Python passes summary_model as self
+  ```
+
+---
+
+## Slide 11 — OOP: Attributes and Methods (Beat 2.6)
+- **Attributes** = data stored on an object (nouns, no `()`): `self.name`, `self.call_count`.
+- **Methods** = functions inside a class (verbs, called with `()`):
+  ```python
+  def generate_response(self, prompt):
+      self.call_count += 1
+      return f"[{self.name}] Simulated answer to: '{prompt}'"
+  ```
+
+---
+
+## Slide 12 — OOP: Inheritance (Beat 2.7)
+- A **child class** reuses attributes and methods from a **parent class**:
+  ```python
+  class ChatModel(AIModel):
+      def set_system_prompt(self, system_prompt):
+          self.system_prompt = system_prompt
+
+      def chat(self, user_message):
+          return self.generate_response(f"System({self.system_prompt}) -> {user_message}")
+  ```
+
+---
+
+## Slide 13 — Inheritance Recap (Beat 2.7)
+- Parent class: `AIModel` (general settings + `generate_response`).
+- Child class: `ChatModel(AIModel)` (automatically gets `name`, `temperature`, `generate_response`, plus adds `chat`).
+- Write shared logic once in the parent, reuse it in specialized children.
+
+---
+
+## Slide 14 — Comprehensions: Clean Dataset Transforms (Beat 2.8)
 - Transform or filter a collection in one readable line:
   ```python
   raw = ["  Summarize AI ", "Explain BIG-O  ", ""]
@@ -77,7 +155,7 @@ Use these slides alongside `course/modules/02-python-ii.md` (Beats 2.1 – 2.4).
 
 ---
 
-## Slide 8 — Big-O Basics: How Speed Scales (Beat 2.3)
+## Slide 15 — Big-O Basics: How Speed Scales (Beat 2.8)
 - **Big-O** tells us how steps grow as data size `n` grows:
   - **`O(1)` Constant:** Instant lookup (1 step), e.g., `key in my_dict` or `item in my_set`.
   - **`O(n)` Linear:** Checks items one by one, e.g., `item in my_list` or a single `for` loop.
@@ -85,13 +163,13 @@ Use these slides alongside `course/modules/02-python-ii.md` (Beats 2.1 – 2.4).
 
 ---
 
-## Slide 9 — Big-O in Practice: `list` vs `set` (Beat 2.3)
+## Slide 16 — Big-O in Practice: `list` vs `set` (Beat 2.8)
 - Checking if a word is in a 50,000-word list (`O(n)`) inside a loop makes your code `O(n^2)` slow.
 - Convert the lookup table to a `set` or `dict` (`O(1)`) once—lookups become practically instant!
 
 ---
 
-## Slide 10 — Kitchen Logbook: Reading Text Files (Beat 2.4)
+## Slide 17 — Kitchen Logbook: Reading Text Files (Beat 2.9)
 - Variables vanish when a script ends; **files** persist on disk.
 - Always use `with open(...) as f:` so Python closes the file automatically:
   ```python
@@ -101,7 +179,7 @@ Use these slides alongside `course/modules/02-python-ii.md` (Beats 2.1 – 2.4).
 
 ---
 
-## Slide 11 — Working with JSON Configs (Beat 2.4)
+## Slide 18 — Working with JSON Configs (Beat 2.9)
 - Built-in `json` module maps JSON files straight to Python `dict`/`list`:
   ```python
   import json
@@ -112,7 +190,7 @@ Use these slides alongside `course/modules/02-python-ii.md` (Beats 2.1 – 2.4).
 
 ---
 
-## Slide 12 — File Modes & Day 2 Exercise (Beat 2.4)
+## Slide 19 — File Modes & Day 2 Exercise (Beat 2.9)
 - Know the 3 main modes:
   - `"r"` = **Read** (default; error if file missing)
   - `"w"` = **Write** (creates file or **overwrites** existing content!)

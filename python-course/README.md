@@ -9,7 +9,7 @@ This course is organized into **two independent days**:
 | Day | Title | Topics | Module File |
 |---|---|---|---|
 | **Day 1** | **Python I (The Labelled Pantry)** | Python Setup, Variables, Data Types, Input & Type Casting, Loops (`for` and `while`) | [01-python-i.md](course/modules/01-python-i.md) |
-| **Day 2** | **Python II (The Kitchen's Containers)** | Functions (`return` vs `print`), Data Structures (`list`, `tuple`, `set`, `dict`), Comprehensions & Big-O Basics, File Handling | [02-python-ii.md](course/modules/02-python-ii.md) |
+| **Day 2** | **Python II (The Kitchen's Containers)** | Functions (`return` vs `print`), Data Structures (`list`, `tuple`, `set`, `dict`), OOP Fundamentals, Comprehensions & Big-O Basics, File Handling | [02-python-ii.md](course/modules/02-python-ii.md) |
 
 ## Guides
 - [Class-day quick start](docs/class-day-quickstart.md) — 5-minute instructor checklist
@@ -56,7 +56,7 @@ course/
   slides/                 Teaching slide decks (day1-python-i-slides.md, day2-python-ii-slides.md)
 demos/
   day1/                   Runnable terminal demos for Day 1 (Beats 1.1–1.5)
-  day2/                   Runnable terminal demos for Day 2 (Beats 2.1–2.4) + sample data/
+  day2/                   Runnable terminal demos for Day 2 (Beats 2.1–2.9) + sample data/
 exercises/                Day 1 & Day 2 student starter scripts + tests/
 scripts/
   setup.sh                Prerequisite checks + demo verification (--day1, --day2, --reset)
