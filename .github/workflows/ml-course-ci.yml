@@ -1,0 +1,47 @@
+name: Fraud MLOps CI (ml-course)
+
+on:
+  push:
+    branches: [main, "feature/**"]
+    paths:
+      - "ml-course/**"
+      - ".github/workflows/ml-course-ci.yml"
+  pull_request:
+    paths:
+      - "ml-course/**"
+      - ".github/workflows/ml-course-ci.yml"
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ml-course
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate dataset, train baseline, and evaluate gate
+        run: |
+          python -m fraud_system.data_gen --version v1 --out data/transactions.csv
+          python -m fraud_system.train --data data/transactions.csv --params params.yaml
+          python -m fraud_system.evaluate --metrics artifacts/metrics.json --params params.yaml --out artifacts/eval_report.json
+
+      - name: Verify DVC pipeline reproducibility
+        run: dvc repro
+
+      - name: Run automated tests
+        run: pytest tests/ -v
+
+      - name: Build Docker image
+        run: docker build -t fraud-mlops-api:ci .

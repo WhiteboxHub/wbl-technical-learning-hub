@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+mlruns/
+mlartifacts/
+*.db
+.class/
+.practice/
+.candidate/
+artifacts/
+data/
+.dvc/cache/
+.dvc/tmp/
+.dvc-local-remote/
+.fault_state.json
+reports/

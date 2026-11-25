@@ -1,0 +1,61 @@
+"""Tuesday Demo 2: Two-stage DVC pipeline reproduced incrementally (`dvc repro`).
+
+Demonstrates how `dvc repro` skips unchanged upstream stages and only reruns
+downstream stages when a parameter changes.
+"""
+import argparse
+import importlib.util
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+
+
+def _run(cmd: list[str], cwd: Path) -> str:
+    env = os.environ.copy()
+    env["PATH"] = str(Path(sys.executable).parent) + os.pathsep + env.get("PATH", "")
+    resolved = [sys.executable, "-m", "dvc", *cmd[1:]] if cmd[0] == "dvc" else cmd
+    res = subprocess.run(resolved, cwd=cwd, env=env, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    return res.stdout
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--change-stage", choices=["train", "prepare", "none"], default="train",
+                        help="Live variation: choose which stage config changes")
+    args = parser.parse_args()
+
+    print("\n=== TUESDAY DEMO 2: DVC PIPELINE INCREMENTAL REPRO ===")
+    if importlib.util.find_spec("dvc") is None:
+        print("DVC is not installed in this Python env. Run inside Docker or install `dvc` via requirements.txt.")
+        return
+
+    with tempfile.TemporaryDirectory(prefix="dvc_demo2_") as tmp:
+        root = Path(tmp)
+        _run(["git", "init"], root)
+        _run(["dvc", "init"], root)
+        (root / "prep.py").write_text("import sys; Path = __import__('pathlib').Path; Path('clean.txt').write_text('rows=1000\\n')", encoding="utf-8")
+        (root / "train.py").write_text("import sys; Path = __import__('pathlib').Path; Path('model.txt').write_text('C=' + sys.argv[1] + '\\n')", encoding="utf-8")
+        (root / "params.yaml").write_text("prep_seed: 42\nC: 1.0\n", encoding="utf-8")
+        (root / "dvc.yaml").write_text(
+            "stages:\n"
+            "  prepare:\n    cmd: python prep.py\n    deps: [prep.py]\n    params: [prep_seed]\n    outs: [clean.txt]\n"
+            "  train:\n    cmd: python train.py ${C}\n    deps: [train.py, clean.txt]\n    params: [C]\n    outs: [model.txt]\n",
+            encoding="utf-8",
+        )
+        print("--- First `dvc repro` (runs both stages) ---")
+        print(_run(["dvc", "repro"], root))
+
+        if args.change_stage == "train":
+            (root / "params.yaml").write_text("prep_seed: 42\nC: 2.5\n", encoding="utf-8")
+        elif args.change_stage == "prepare":
+            (root / "params.yaml").write_text("prep_seed: 99\nC: 1.0\n", encoding="utf-8")
+
+        print(f"--- Second `dvc repro` after changing `{args.change_stage}` ---")
+        print(_run(["dvc", "repro"], root))
+        print("LIVE VARIATION: run with `--change-stage prepare` vs `--change-stage none`.")
+
+
+if __name__ == "__main__":
+    main()

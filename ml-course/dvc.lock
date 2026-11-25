@@ -1,0 +1,77 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python -m fraud_system.data_gen --version v1 --n-rows 2000 --seed 42 
+      --out data/transactions.csv
+    deps:
+    - path: fraud_system/data_gen.py
+      hash: md5
+      md5: c66315b86f7882a24d3d6aeb32b4971e
+      size: 3883
+    params:
+      params.yaml:
+        data.n_rows: 2000
+        data.random_state: 42
+        data.version: v1
+    outs:
+    - path: data/transactions.csv
+      hash: md5
+      md5: b2520274eef9faec49340a0b97ca90f8
+      size: 69167
+  train:
+    cmd: python -m fraud_system.train --data data/transactions.csv --params 
+      params.yaml
+    deps:
+    - path: data/transactions.csv
+      hash: md5
+      md5: b2520274eef9faec49340a0b97ca90f8
+      size: 69167
+    - path: fraud_system/features.py
+      hash: md5
+      md5: 891155985a4bab6bccfa995072de0d20
+      size: 1378
+    - path: fraud_system/train.py
+      hash: md5
+      md5: 390d4e980bce67eae171ac5da69354e7
+      size: 8235
+    params:
+      params.yaml:
+        data.random_state: 42
+        data.test_size: 0.2
+        model.C: 1.0
+        model.class_weight: balanced
+        model.max_iter: 500
+        model.threshold: 0.35
+    outs:
+    - path: artifacts/metrics.json
+      hash: md5
+      md5: 3941c8b54e7e0aa94cb53563a0331ba7
+      size: 377
+    - path: artifacts/model.joblib
+      hash: md5
+      md5: 388a21ca450d1ffff75a2c6b7f8b774c
+      size: 2695
+    - path: artifacts/reference_stats.json
+      hash: md5
+      md5: c516b022450ea18add1465c3170a9957
+      size: 64606
+  evaluate:
+    cmd: python -m fraud_system.evaluate --metrics artifacts/metrics.json 
+      --params params.yaml --out artifacts/eval_report.json
+    deps:
+    - path: artifacts/metrics.json
+      hash: md5
+      md5: 3941c8b54e7e0aa94cb53563a0331ba7
+      size: 377
+    - path: fraud_system/evaluate.py
+      hash: md5
+      md5: 1318fc79fe1ee38ee68d7e4599856d87
+      size: 1513
+    params:
+      params.yaml:
+        monitoring.min_recall_gate: 0.7
+    outs:
+    - path: artifacts/eval_report.json
+      hash: md5
+      md5: 60aabc3a8aa200e46c51293c716db58b
+      size: 163

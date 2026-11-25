@@ -1,0 +1,11 @@
+# Optional monitoring override (Thursday + Friday):
+#   docker compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d
+services:
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - fraud-api

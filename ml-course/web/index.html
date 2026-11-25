@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fraud Detection MLOps Console</title>
+  <style>
+    :root { --bg:#0f1419; --card:#171e26; --fg:#e6edf3; --muted:#8b949e; --line:#2d3640; --ok:#2ea043; --warn:#d29922; --err:#f85149; --accent:#58a6ff; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:15px/1.5 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+    main { max-width:1040px; margin:0 auto; padding:20px; }
+    h1 { font-size:1.45rem; margin:0 0 6px; }
+    h2 { font-size:1.05rem; margin:0 0 12px; color:var(--accent); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:16px; margin-top:16px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    label { display:block; font-size:0.85rem; color:var(--muted); margin-top:8px; }
+    input { width:100%; padding:6px 8px; border:1px solid var(--line); border-radius:6px; background:#0d1117; color:var(--fg); }
+    button { padding:7px 12px; border:1px solid var(--line); border-radius:6px; background:#21262d; color:var(--fg); cursor:pointer; }
+    button:hover { border-color:var(--accent); }
+    button.danger { border-color:var(--err); color:#ffb3ae; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:99px; font-weight:600; font-size:0.8rem; }
+    .HEALTHY { background:#132f1e; color:#56d364; }
+    .ALERT { background:#3a1618; color:#ff7b72; }
+    table { width:100%; border-collapse:collapse; margin-top:10px; font-size:0.9rem; }
+    th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
+    th { color:var(--muted); }
+    pre { background:#0d1117; border:1px solid var(--line); border-radius:6px; padding:10px; overflow-x:auto; font-size:0.85rem; }
+  </style>
+</head>
+<body>
+<main>
+  <div class="row" style="justify-content:space-between">
+    <div>
+      <h1>Fraud Detection MLOps Console</h1>
+      <small style="color:var(--muted)">Week 2 PM — Tracking, Serving, Monitoring &amp; Drift Detection</small>
+    </div>
+    <div class="row">
+      <a href="/docs" style="color:var(--accent)">Swagger Docs</a>
+      <a href="http://localhost:5000" target="_blank" style="color:var(--accent)">MLflow UI (:5000)</a>
+    </div>
+  </div>
+
+  <div class="grid">
+    <section class="card">
+      <h2>1. Real-Time Prediction (/v1/predict)</h2>
+      <div class="grid" style="grid-template-columns:1fr 1fr; gap:8px; margin-top:0">
+        <div><label>Amount ($)</label><input id="amount" type="number" value="1850" step="10"></div>
+        <div><label>Hour (0-23)</label><input id="hour" type="number" value="2"></div>
+        <div><label>Merchant Risk (0-1)</label><input id="risk" type="number" value="0.82" step="0.05"></div>
+        <div><label>24h Velocity</label><input id="vel" type="number" value="5"></div>
+        <div><label>Distance (km)</label><input id="dist" type="number" value="220"></div>
+        <div><label>International (0/1)</label><input id="intl" type="number" value="1"></div>
+        <div><label>Card Present (0/1)</label><input id="cp" type="number" value="0"></div>
+        <div><label>Account Age (days)</label><input id="age" type="number" value="60"></div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button id="predictBtn" type="button">Score Transaction</button>
+        <button id="badBtn" type="button" class="danger">Send Bad Input (422)</button>
+      </div>
+      <pre id="predOut">Click "Score Transaction" to call POST /v1/predict</pre>
+    </section>
+
+    <section class="card">
+      <h2>2. Live Monitoring &amp; Drift (/v1/monitor/drift)</h2>
+      <div class="row">
+        <span id="statusBadge" class="badge HEALTHY">HEALTHY</span>
+        <button id="simCleanBtn" type="button">Simulate Clean Batch</button>
+        <button id="simDriftBtn" type="button" class="danger">Inject Data Drift</button>
+        <button id="resetBtn" type="button">Reset</button>
+      </div>
+      <p id="metricsLine" style="color:var(--muted); margin:10px 0 4px">Loading...</p>
+      <div id="alertsBox" style="color:var(--err); font-size:0.9rem"></div>
+      <table>
+        <thead><tr><th>Feature</th><th>PSI</th><th>KS p-val</th><th>Status</th></tr></thead>
+        <tbody id="driftRows"></tbody>
+      </table>
+    </section>
+  </div>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  async function refreshDrift() {
+    const res = await fetch("/v1/monitor/drift");
+    const d = await res.json();
+    $("statusBadge").textContent = d.overall_status;
+    $("statusBadge").className = "badge " + d.overall_status;
+    $("metricsLine").textContent = `Requests: ${d.total_requests} | p95: ${d.latency_p95_ms} ms | Live Fraud Rate: ${(d.live_fraud_rate * 100).toFixed(1)}% | Max PSI: ${d.max_psi}`;
+    $("alertsBox").textContent = d.alerts.length ? d.alerts.join(" • ") : "";
+    const tbody = $("driftRows");
+    tbody.replaceChildren();
+    for (const [feat, info] of Object.entries(d.features || {})) {
+      const tr = document.createElement("tr");
+      for (const v of [feat, info.psi, info.ks_pvalue, info.status]) {
+        const td = document.createElement("td");
+        td.textContent = v;
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    }
+  }
+
+  $("predictBtn").addEventListener("click", async () => {
+    const body = {
+      amount: +$("amount").value, hour_of_day: +$("hour").value,
+      merchant_risk_score: +$("risk").value, tx_velocity_24h: +$("vel").value,
+      distance_from_home_km: +$("dist").value, is_international: +$("intl").value,
+      card_present: +$("cp").value, account_age_days: +$("age").value
+    };
+    const r = await fetch("/v1/predict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    $("predOut").textContent = `HTTP ${r.status}\n` + JSON.stringify(await r.json(), null, 2);
+    refreshDrift();
+  });
+
+  $("badBtn").addEventListener("click", async () => {
+    const r = await fetch("/v1/predict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ amount: -99, hour_of_day: 31 }) });
+    $("predOut").textContent = `HTTP ${r.status}\n` + JSON.stringify(await r.json(), null, 2);
+  });
+
+  $("simCleanBtn").addEventListener("click", async () => {
+    await fetch("/v1/monitor/simulate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ n: 80, data_drift: false }) });
+    refreshDrift();
+  });
+
+  $("simDriftBtn").addEventListener("click", async () => {
+    await fetch("/v1/monitor/simulate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ n: 80, data_drift: true }) });
+    refreshDrift();
+  });
+
+  $("resetBtn").addEventListener("click", async () => {
+    await fetch("/v1/monitor/reset", { method: "POST" });
+    refreshDrift();
+  });
+
+  refreshDrift();
+</script>
+</body>
+</html>
