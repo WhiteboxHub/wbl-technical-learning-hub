@@ -1,0 +1,13 @@
+.class/
+.practice/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+.pytest_cache/
+.deepeval/
+.DS_Store
+*.log
+*.zip
+
