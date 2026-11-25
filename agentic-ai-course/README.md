@@ -34,24 +34,17 @@ bash scripts/smoke.sh      # bash
 - **Swagger UI:** [http://localhost:8000/docs](http://localhost:8000/docs)
 - **Dashboard:** [http://localhost:8000](http://localhost:8000)
 
-Run the PM test suite:
-```bash
-pytest tests/ -v
-```
-
 Reset: `docker compose down -v && docker compose up --build -d`
 
 ## PM Class Modules
 
-| # | PM Class | Topic | Demo Script | Tests |
+| # | PM Class | Topic | Demo Script | Verification |
 |---|---|---|---|---|
-| 1 | Monday PM | LangChain & LangGraph | `python examples/pm/01_langgraph_deep_dive.py` | `pytest tests/test_graph.py tests/test_pm_demonstrations.py::test_pm_day1_demo_execution -v` |
-| 2 | Tuesday PM | Tool Calling & Structured Outputs | `python examples/pm/02_react_tools_deep_dive.py` | `pytest tests/test_tools.py tests/test_pm_demonstrations.py::test_pm_day2_demo_execution -v` |
-| 3 | Wednesday PM | MCP & Agent Memory | `python examples/pm/03_mcp_memory_deep_dive.py` | `pytest tests/test_mcp_memory.py tests/test_pm_demonstrations.py::test_pm_day3_demo_execution -v` |
-| 4 | Thursday PM | Multi-Agent Workflows | `python examples/pm/04_multi_agent_deep_dive.py` | `pytest tests/test_multi_agent.py tests/test_pm_demonstrations.py::test_pm_day4_demo_execution -v` |
-| 5 | Friday PM | HITL, Guardrails & Evaluation | `python examples/pm/05_hitl_evaluation_deep_dive.py` | `pytest tests/test_hitl_guardrails.py tests/test_edge_cases_security.py tests/test_pm_demonstrations.py::test_pm_day5_demo_execution -v` |
-
-Run all five demos end-to-end: `pytest tests/ -v`
+| 1 | Monday PM | LangChain & LangGraph | `python examples/pm/01_langgraph_deep_dive.py` | StateGraph execution & checkpointing |
+| 2 | Tuesday PM | Tool Calling & Structured Outputs | `python examples/pm/02_react_tools_deep_dive.py` | ReAct loop & parallel tool execution |
+| 3 | Wednesday PM | MCP & Agent Memory | `python examples/pm/03_mcp_memory_deep_dive.py` | MCP tool call & vector RAG retrieval |
+| 4 | Thursday PM | Multi-Agent Workflows | `python examples/pm/04_multi_agent_deep_dive.py` | Supervisor-worker multi-agent pipeline |
+| 5 | Friday PM | HITL, Guardrails & Evaluation | `python examples/pm/05_hitl_evaluation_deep_dive.py` | Human-in-the-loop review & guardrails |
 
 ## Layout
 ```
@@ -71,7 +64,6 @@ agentic-ai-course/
 │   ├── 03_mcp_memory_deep_dive.py
 │   ├── 04_multi_agent_deep_dive.py
 │   └── 05_hitl_evaluation_deep_dive.py
-├── tests/               # 34 Automated PM tests (unit + integration + demo verification)
 ├── course/modules/      # PM module files (beat-by-beat instructor scripts)
 ├── course/stack-backlog.md # Component architecture & verification ledger
 ├── docs/                # Instructor guide, student guide, quickstart, course-toc
@@ -83,7 +75,6 @@ agentic-ai-course/
 ├── docker-compose.yml
 ├── instructor-steps.md
 ├── pyproject.toml
-├── pytest.ini
 └── requirements.txt
 ```
 
