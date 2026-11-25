@@ -5,6 +5,7 @@
 Running example: **ClaimFlow AI** — a production-grade healthcare prior-authorization agent platform built progressively across all five PM classes.
 
 ## Guides & Documentation
+- [Instructor Steps](instructor-steps.md) — Day-of-class step-by-step cheat sheet & voice controls
 - [Course Table of Contents](docs/course-toc.md) — Comprehensive syllabus and topic breakdown
 - [Class-day quick start](docs/class-day-quickstart.md) — 5-minute instructor checklist
 - [Instructor Guide](docs/instructor-guide.md) — Setup, running a PM class with the agent, module plans, troubleshooting
@@ -72,13 +73,17 @@ agentic-ai-course/
 │   └── 05_hitl_evaluation_deep_dive.py
 ├── tests/               # 34 Automated PM tests (unit + integration + demo verification)
 ├── course/modules/      # PM module files (beat-by-beat instructor scripts)
+├── course/stack-backlog.md # Component architecture & verification ledger
 ├── docs/                # Instructor guide, student guide, quickstart, course-toc
+├── postman/             # Postman collection for the ClaimFlow API
 ├── scripts/             # setup.sh/ps1, smoke.sh/ps1, break.sh/ps1, fix.sh/ps1
 ├── web/                 # ClaimFlow AI browser dashboard
 ├── .claude/skills/      # setup-agentic-class, setup-candidate, teach-agentic-class, practice-agentic
 ├── Dockerfile
 ├── docker-compose.yml
+├── instructor-steps.md
 ├── pyproject.toml
+├── pytest.ini
 └── requirements.txt
 ```
 

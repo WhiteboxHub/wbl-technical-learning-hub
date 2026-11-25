@@ -1,0 +1,264 @@
+{
+  "info": {
+    "_postman_id": "c1a2b3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+    "name": "ClaimFlow AI - Healthcare Prior-Authorization API",
+    "description": "Postman API Collection for the Agentic AI Engineering Course. Covers all ClaimFlow AI endpoints including health, claim submission, LangGraph execution, Human-in-the-Loop review, and Model Context Protocol (MCP) tool execution.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "active_claim_id",
+      "value": "CLM-POSTMAN-01",
+      "type": "string"
+    },
+    {
+      "key": "hitl_claim_id",
+      "value": "CLM-POSTMAN-HITL",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Health & Diagnostics",
+      "item": [
+        {
+          "name": "Health Check Liveness",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Liveness probe verifying that the FastAPI server and ClaimFlow orchestrator are running."
+          },
+          "response": []
+        },
+        {
+          "name": "List Sample Patients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/patients",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "patients"]
+            },
+            "description": "Retrieves the synthetic patient roster from the healthcare knowledge base."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Prior Authorization Claims",
+      "item": [
+        {
+          "name": "Submit Claim - Standard Auto-Approved",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"{{active_claim_id}}\",\n  \"patient_id\": \"PAT-901\",\n  \"patient_name\": \"John Doe\",\n  \"provider_id\": \"PRV-501\",\n  \"diagnosis_code\": \"M17.11\",\n  \"procedure_code\": \"27447\",\n  \"requested_amount\": 1500.0,\n  \"clinical_notes\": \"Patient with severe unicompartmental osteoarthritis failing conservative physical therapy.\",\n  \"tenant_id\": \"tenant-health-corp\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/claims",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "claims"]
+            },
+            "description": "Submits a standard prior-authorization claim. Evaluated by LangGraph agent crew and auto-approved based on clinical guidelines."
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Claim - Ineligible Patient Denial",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"CLM-POSTMAN-DENIED\",\n  \"patient_id\": \"PAT-903\",\n  \"patient_name\": \"Robert Miller\",\n  \"provider_id\": \"PRV-501\",\n  \"diagnosis_code\": \"M17.11\",\n  \"procedure_code\": \"27447\",\n  \"requested_amount\": 1500.0,\n  \"clinical_notes\": \"Routine checkup requested.\",\n  \"tenant_id\": \"tenant-health-corp\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/claims",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "claims"]
+            },
+            "description": "Submits a claim for an ineligible patient (inactive coverage). Triggers immediate denial with clinical reasoning."
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Claim - High Dollar Triggers HITL Gate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claim_id\": \"{{hitl_claim_id}}\",\n  \"patient_id\": \"PAT-901\",\n  \"patient_name\": \"John Doe\",\n  \"provider_id\": \"PRV-501\",\n  \"diagnosis_code\": \"M17.11\",\n  \"procedure_code\": \"27447\",\n  \"requested_amount\": 18000.0,\n  \"clinical_notes\": \"Bilateral knee reconstruction with experimental surgical implant.\",\n  \"tenant_id\": \"tenant-health-corp\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/claims",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "claims"]
+            },
+            "description": "Submits a high-dollar claim ($18,000 > $10,000 threshold). Triggers the Human-in-the-Loop review gate and pauses in PENDING_HUMAN_APPROVAL state."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Claim Status & Full Audit Trace",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/claims/{{active_claim_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "claims", "{{active_claim_id}}"]
+            },
+            "description": "Fetches current state, approved amount, denial reasons, token cost, and complete agent reasoning trace."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Human-in-the-Loop (HITL)",
+      "item": [
+        {
+          "name": "Human Review - Approve Claim",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"decision\": \"approved\",\n  \"human_notes\": \"Medical director review confirmed necessity for custom surgical hardware.\",\n  \"approved_amount\": 18000.0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/claims/{{hitl_claim_id}}/human-review",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "claims", "{{hitl_claim_id}}", "human-review"]
+            },
+            "description": "Resolves a pending HITL authorization gate with an approval decision and resumes the LangGraph workflow."
+          },
+          "response": []
+        },
+        {
+          "name": "Human Review - Reject Claim",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"decision\": \"rejected\",\n  \"human_notes\": \"Insufficient evidence of conservative therapy failure before experimental procedure.\",\n  \"approved_amount\": 0.0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/claims/{{hitl_claim_id}}/human-review",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "claims", "{{hitl_claim_id}}", "human-review"]
+            },
+            "description": "Resolves a pending HITL authorization gate with a rejection decision."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Model Context Protocol (MCP)",
+      "item": [
+        {
+          "name": "List MCP Tools",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/mcp/tools",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "mcp", "tools"]
+            },
+            "description": "Lists all tools exposed over the Model Context Protocol (JSON-RPC 2.0 tool introspection)."
+          },
+          "response": []
+        },
+        {
+          "name": "Call Tool - Check Eligibility",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"check_patient_eligibility\",\n  \"arguments\": {\n    \"patient_id\": \"PAT-901\",\n    \"tenant_id\": \"tenant-health-corp\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/mcp/call",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "mcp", "call"]
+            },
+            "description": "Executes the check_patient_eligibility tool via the Model Context Protocol."
+          },
+          "response": []
+        },
+        {
+          "name": "Call Tool - Validate Medical Codes",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"validate_medical_codes\",\n  \"arguments\": {\n    \"diagnosis_code\": \"M17.11\",\n    \"procedure_code\": \"27447\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/mcp/call",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "mcp", "call"]
+            },
+            "description": "Validates ICD-10 diagnosis and CPT procedure code pairings via MCP."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
