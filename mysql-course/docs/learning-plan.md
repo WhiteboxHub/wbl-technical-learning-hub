@@ -29,7 +29,7 @@
 ### Phase 4 — Evaluation, Weak-Area Diagnosis & State Update (Quiz Mode)
 1. Ask **8 questions ONE at a time** mixing conceptual, "explain in your own words", scenario, and predict-row-count / `EXPLAIN` questions.
 2. **NEVER reveal answers or hints while the quiz is running.**
-3. **After question 8 only:** output `QUIZ RESULT` (score, per-beat breakdown, missed explanations, priority weak areas), `UPDATED CANDIDATE STATE` ([prompts/candidate-state.template.md](../prompts/candidate-state.template.md)), and `DAILY REPORT` ([prompts/daily-report.template.md](../prompts/daily-report.template.md)).
+3. **After question 8 only:** output `QUIZ RESULT` (score, per-beat breakdown, missed explanations, priority weak areas), `UPDATED CANDIDATE STATE`, and `DAILY REPORT` ([docs/student-guide.md](student-guide.md)).
 
 ---
 

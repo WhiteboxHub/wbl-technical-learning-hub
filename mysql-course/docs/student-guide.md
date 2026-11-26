@@ -28,13 +28,22 @@ Master the high-impact MySQL & NoSQL skills taught in your 2-hour class — and 
 ---
 
 ## 3. Study With ChatGPT or Any AI Coding Agent (Even Without Docker)
-Paste the GitHub link to `wbl-technical-learning-hub/mysql-course` (or upload the folder/zip) into **ChatGPT**, **Claude**, **Gemini**, **Antigravity**, or **Cursor**, and use a prompt from **[prompts/chatgpt-quick-prompts.md](../prompts/chatgpt-quick-prompts.md)**.
+- **In Claude Code / Antigravity / Cursor:** say **"start learning"**, **"explain module 1"**, **"help with the exercise"**, or **"quiz me"** (`practice-mysql` loads automatically).
+- **In ChatGPT / Gemini Web:** paste the GitHub link to `wbl-technical-learning-hub/mysql-course` (or upload the folder) with this copy-paste prompt:
+  ```text
+  Read AGENTS.md, docs/learning-plan.md, docs/schema-reference.md, course/modules/, and course/self-study/.
+  Guide me through Module [1 / 2 / 3 / 4] (and course/self-study/ afterward) using the 4-stage loop:
+  1. Teach ONE Beat at a time (Story Anchor -> rule -> training_db example -> Candidate Takeaway) and ask 1 check question — WAIT for my reply before advancing.
+  2. Walk through db/labs/ one task at a time (make me predict row counts first; 4-Rung Hint Ladder, never give finished solutions).
+  3. Run an 8-question quiz one question at a time (no answers until the end), then output my score, weak areas, and DAILY REPORT.
+  ```
 
 The AI agent follows the **4-Stage Loop**:
 1. **Tutor:** Explains 1 Beat with its Story Anchor -> gives the **Candidate Takeaway** -> asks you to explain it back or answer 1 check question.
 2. **Practice:** Walks you through `db/labs/module-01-*.sql` … `04-*.sql` one task at a time (predict row counts first!).
 3. **SQL Coach:** Reviews your SQL using the **4-Rung Hint Ladder** (hints before solutions).
-4. **Quiz & Evaluate:** Asks 8 questions one at a time (no early answers), scores you, lists weak areas, and outputs your `CANDIDATE STATE` + `DAILY REPORT`.
+4. **Quiz & Evaluate:** Asks 8 questions one at a time (no early answers), scores you, lists weak areas, and outputs your **`DAILY REPORT`**:
+   `DAILY REPORT - [Name] - [Date] | Module: __ | Labs: [Done/Partial] | Score: __/8 | Weak areas: [...] | Open Qs: [...]`
 
 ---
 

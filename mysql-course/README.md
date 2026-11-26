@@ -14,8 +14,7 @@ Running example: **Training Management DB** (`student`, `course`, `subject`, `en
 ---
 
 ## Paste Into ChatGPT or Any AI Coding Agent (Candidates)
-1. Paste the GitHub link to `wbl-technical-learning-hub/mysql-course` (or upload the folder/zip) into **ChatGPT**, **Claude**, **Gemini**, **Antigravity**, or **Cursor**.
-2. Copy the starter prompt from **[prompts/chatgpt-quick-prompts.md](prompts/chatgpt-quick-prompts.md)**.
+1. Open in **Claude Code / Antigravity / Cursor** (loads `.claude/skills/practice-mysql/SKILL.md` automatically) OR paste the GitHub link / folder into **ChatGPT / Claude Web / Gemini** with the starter prompt in **[docs/student-guide.md](docs/student-guide.md)**.
 3. The AI agent will:
    - Explain each Beat clearly using its **Story Anchor**, `training_db` example, and plain-English **Candidate Takeaway**
    - Ask you to explain concepts back in your own words before moving on
@@ -61,7 +60,6 @@ mysql-course/
 ├── instructor-steps.md        # 2-hour instructor runbook & pacing controls
 ├── docker-compose.yml         # MySQL 8.0 (:3306) + Adminer (:8082) + Redis (:6379)
 ├── .claude/skills/            # setup-mysql-class, teach-mysql-class (2-hr timer), setup-candidate, practice-mysql
-├── prompts/                   # 4 WBL Agent Master Prompts + ChatGPT quick prompts + templates
 ├── course/
 │   ├── modules/               # 4 tight 2-hour modules (Story Anchors, Candidate Takeaways, Demos, Q&As)
 │   └── self-study/            # High-ROI post-class SQL & NoSQL self-study packs

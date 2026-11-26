@@ -39,7 +39,7 @@ Teach MySQL, Concurrency, Query Performance & NoSQL Essentials cleanly inside a 
 ---
 
 ## 4. Candidate Self-Study Loop (After the 2-Hour Class)
-Send candidates [docs/student-guide.md](student-guide.md) and [prompts/chatgpt-quick-prompts.md](../prompts/chatgpt-quick-prompts.md). They paste the repo into **ChatGPT, Claude, Antigravity, or any coding agent** to:
+Send candidates [docs/student-guide.md](student-guide.md) and [docs/learning-plan.md](learning-plan.md). They open the repo in **Claude Code / Antigravity** (using `practice-mysql`) or paste it into **ChatGPT / Gemini** to:
 1. Re-learn any Beat from `course/modules/01–04` with its Story Anchor and practice **explaining the Candidate Takeaway in their own words**
 2. Complete the 4 hands-on labs in `db/labs/` (predicting row counts before running) and debug SQL with the **4-Rung Hint Ladder**
 3. Continue into `course/self-study/01–02` for deeper senior SQL & NoSQL topics not covered in the 2-hour clock (`CASE WHEN`, Gap locks, SQL Injection, Zero-Downtime Migrations, MongoDB, Redis, Elasticsearch, VectorDB, Neo4j)

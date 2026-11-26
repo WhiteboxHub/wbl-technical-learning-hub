@@ -25,5 +25,5 @@ Project folder: `mysql-course/` (inside `wbl-technical-learning-hub`). More deta
 `next` · `back` · `repeat` · `skip` · `answer` · `more` · `status` (shows elapsed vs 120-min clock) · `take over` · `jump N.M` · `end`
 
 ## At the end of class
-1. Say `end`. Assign `db/labs/` + [prompts/chatgpt-quick-prompts.md](prompts/chatgpt-quick-prompts.md) so candidates review every Beat, practice explaining the **Candidate Takeaways** in their own words, and complete the labs + 8-question quiz.
+1. Say `end`. Assign `db/labs/` + [docs/student-guide.md](docs/student-guide.md) (or `practice-mysql`) so candidates review every Beat, practice explaining the **Candidate Takeaways** in their own words, and complete the labs + 8-question quiz.
 2. Run `scripts/fix.sh` (or `scripts/setup.sh --stop`) to clean up.

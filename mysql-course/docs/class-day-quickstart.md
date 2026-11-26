@@ -31,4 +31,4 @@ Wait for **READY**. It starts MySQL (`:3306`), Adminer (`:8082`), and Redis (`:6
 | `end` | Wrap up + assign post-class lab |
 
 ## 4. Candidates After Class
-Send candidates [docs/student-guide.md](student-guide.md) and [prompts/chatgpt-quick-prompts.md](../prompts/chatgpt-quick-prompts.md) so they can review every Beat, run the 4 labs in `db/labs/`, practice explaining concepts in their own words, and send you their Daily Report.
+Send candidates [docs/student-guide.md](student-guide.md) and [docs/learning-plan.md](learning-plan.md) so they can review every Beat, run the 4 labs in `db/labs/`, practice explaining concepts in their own words, and send you their Daily Report.

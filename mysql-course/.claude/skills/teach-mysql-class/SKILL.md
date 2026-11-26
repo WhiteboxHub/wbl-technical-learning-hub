@@ -40,7 +40,7 @@ Content lives in `course/modules/01-*.md` through `04-*.md`. Never invent topics
 
 ## Ending a Module or the 2-Hour Class
 1. Recap beats completed in 3 lines using the Story Anchor.
-2. Assign the matching post-class lab (`db/labs/module-0N-*.sql`) and tell candidates to study with ChatGPT / `practice-mysql` using `prompts/chatgpt-quick-prompts.md`.
+2. Assign the matching post-class lab (`db/labs/module-0N-*.sql`) and tell candidates to study with ChatGPT / `practice-mysql` using `docs/student-guide.md`.
 3. Run the **Done-check** and record skipped/confusing items in `.class/progress.md`.
 4. Offer `scripts/fix.sh` (or `--reset` only if explicitly confirmed).
 
