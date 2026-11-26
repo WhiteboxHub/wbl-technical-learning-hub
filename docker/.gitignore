@@ -1,0 +1,13 @@
+.class/
+.practice/
+.fault-override.yml
+candidate-state.md
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+.DS_Store
+*.db
+*.log
