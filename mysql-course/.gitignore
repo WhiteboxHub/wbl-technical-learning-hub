@@ -1,0 +1,5 @@
+.class/
+.practice/
+.env
+*.local.sql
+.fault-override.yml
